@@ -1,0 +1,11 @@
+apiVersion: 1
+
+datasources:
+  - name: Cassandra
+    type: hadesarchitect-cassandra-datasource
+    access: proxy
+    isDefault: true
+    jsonData:
+      host: "cassandra:9042"
+      keyspace: aqi
+    editable: true

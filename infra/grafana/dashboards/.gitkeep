@@ -1,0 +1,2 @@
+Drop exported dashboard JSON files here (Dashboard settings -> JSON Model -> save as <name>.json).
+Grafana auto-loads anything in this folder (see provisioning/dashboards/dashboards.yml).

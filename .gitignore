@@ -1,0 +1,27 @@
+# Secrets / local config
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# Data (keep small samples in git, not full dumps)
+data/
+*.parquet
+*.csv
+!**/sample_*.csv
+
+# ML artifacts
+ml/training/*.model
+ml/training/*.pkl
+ml/training/mlruns/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

@@ -1,0 +1,194 @@
+name: aqi-bigdata
+
+networks:
+  aqi-net:
+    driver: bridge
+
+volumes:
+  kafka_data:
+  minio_data:
+  cassandra_data:
+  grafana_data:
+  spark_events:
+
+services:
+  # ---------------------------------------------------------------------
+  # Kafka (KRaft mode, single node, no Zookeeper)
+  # ---------------------------------------------------------------------
+  kafka:
+    image: bitnami/kafka:3.7
+    container_name: aqi-kafka
+    restart: unless-stopped
+    ports:
+      - "9092:9092"   # internal/plaintext listener
+      - "9094:9094"   # external listener (host access)
+    environment:
+      KAFKA_CFG_NODE_ID: "0"
+      KAFKA_CFG_PROCESS_ROLES: controller,broker
+      KAFKA_CFG_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093,EXTERNAL://:9094
+      KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,EXTERNAL://localhost:9094
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: 0@kafka:9093
+      KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: "false"
+      ALLOW_PLAINTEXT_LISTENER: "yes"
+    volumes:
+      - kafka_data:/bitnami/kafka
+    networks: [aqi-net]
+    healthcheck:
+      test: ["CMD-SHELL", "kafka-topics.sh --bootstrap-server localhost:9092 --list"]
+      interval: 10s
+      timeout: 10s
+      retries: 15
+      start_period: 20s
+
+  kafka-init:
+    image: bitnami/kafka:3.7
+    container_name: aqi-kafka-init
+    depends_on:
+      kafka:
+        condition: service_healthy
+    entrypoint: ["/bin/bash", "/scripts/create-topics.sh"]
+    volumes:
+      - ./infra/kafka/create-topics.sh:/scripts/create-topics.sh:ro
+    networks: [aqi-net]
+    restart: "no"
+
+  # ---------------------------------------------------------------------
+  # Spark (standalone cluster manager, 1 master + 1 worker)
+  # ---------------------------------------------------------------------
+  spark-master:
+    image: bitnami/spark:3.5
+    container_name: aqi-spark-master
+    restart: unless-stopped
+    environment:
+      SPARK_MODE: master
+      SPARK_RPC_AUTHENTICATION_ENABLED: "no"
+      SPARK_RPC_ENCRYPTION_ENABLED: "no"
+      SPARK_SSL_ENABLED: "no"
+    ports:
+      - "7077:7077"   # spark master RPC (submit jobs here)
+      - "8080:8080"   # spark master web UI
+    volumes:
+      - ./processing:/opt/processing
+      - spark_events:/opt/bitnami/spark/events
+    networks: [aqi-net]
+
+  spark-worker:
+    image: bitnami/spark:3.5
+    container_name: aqi-spark-worker
+    restart: unless-stopped
+    depends_on: [spark-master]
+    environment:
+      SPARK_MODE: worker
+      SPARK_MASTER_URL: spark://spark-master:7077
+      SPARK_WORKER_CORES: "2"
+      SPARK_WORKER_MEMORY: 2G
+      SPARK_RPC_AUTHENTICATION_ENABLED: "no"
+      SPARK_RPC_ENCRYPTION_ENABLED: "no"
+      SPARK_SSL_ENABLED: "no"
+    ports:
+      - "8081:8081"   # spark worker web UI
+    volumes:
+      - ./processing:/opt/processing
+      - spark_events:/opt/bitnami/spark/events
+    networks: [aqi-net]
+
+  # ---------------------------------------------------------------------
+  # MinIO (raw data lake: raw/ history/ buckets)
+  # ---------------------------------------------------------------------
+  minio:
+    image: minio/minio:latest
+    container_name: aqi-minio
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    ports:
+      - "9000:9000"   # S3 API
+      - "9001:9001"   # web console
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minioadmin123}
+    volumes:
+      - minio_data:/data
+    networks: [aqi-net]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  minio-init:
+    image: minio/mc:latest
+    container_name: aqi-minio-init
+    depends_on:
+      minio:
+        condition: service_healthy
+    entrypoint: ["/bin/sh", "/scripts/create-buckets.sh"]
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minioadmin123}
+    volumes:
+      - ./infra/minio/create-buckets.sh:/scripts/create-buckets.sh:ro
+    networks: [aqi-net]
+    restart: "no"
+
+  # ---------------------------------------------------------------------
+  # Cassandra (processed data: measurements, daily_agg, alerts, forecasts)
+  # ---------------------------------------------------------------------
+  cassandra:
+    image: cassandra:4.1
+    container_name: aqi-cassandra
+    restart: unless-stopped
+    ports:
+      - "9042:9042"
+    environment:
+      CASSANDRA_CLUSTER_NAME: aqi-cluster
+      CASSANDRA_DC: dc1
+      CASSANDRA_ENDPOINT_SNITCH: GossipingPropertyFileSnitch
+      HEAP_NEWSIZE: 128M
+      MAX_HEAP_SIZE: 1024M
+    volumes:
+      - cassandra_data:/var/lib/cassandra
+    networks: [aqi-net]
+    healthcheck:
+      test: ["CMD-SHELL", "cqlsh -e 'describe keyspaces'"]
+      interval: 15s
+      timeout: 10s
+      retries: 20
+      start_period: 40s
+
+  cassandra-init:
+    image: cassandra:4.1
+    container_name: aqi-cassandra-init
+    depends_on:
+      cassandra:
+        condition: service_healthy
+    entrypoint: ["/bin/bash", "/scripts/init-schema.sh"]
+    volumes:
+      - ./infra/cassandra/init-schema.sh:/scripts/init-schema.sh:ro
+      - ./infra/cassandra/schema.cql:/scripts/schema.cql:ro
+    networks: [aqi-net]
+    restart: "no"
+
+  # ---------------------------------------------------------------------
+  # Grafana (dashboard)
+  # ---------------------------------------------------------------------
+  grafana:
+    image: grafana/grafana:10.4.2
+    container_name: aqi-grafana
+    restart: unless-stopped
+    depends_on:
+      cassandra:
+        condition: service_healthy
+    ports:
+      - "3000:3000"
+    environment:
+      GF_INSTALL_PLUGINS: hadesarchitect-cassandra-datasource
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-admin}
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./infra/grafana/provisioning:/etc/grafana/provisioning
+      - ./infra/grafana/dashboards:/var/lib/grafana/dashboards
+    networks: [aqi-net]
