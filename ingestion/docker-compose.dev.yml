@@ -1,0 +1,23 @@
+# Kafka + MinIO tối giản để B chạy thu thập trên máy mình.
+# Dữ liệu MinIO nằm trong volume. Kafka không có volume: đừng chạy `down` khi consumer chưa ghi hết.
+services:
+  kafka:
+    image: apache/kafka:3.9.0
+    restart: unless-stopped
+    ports:
+      - "9092:9092"
+  minio:
+    # Image chính thức minio/minio đã bị gỡ khỏi Docker Hub; đây là bản build từ mã nguồn MinIO do bên thứ ba đăng.
+    image: coollabsio/minio:RELEASE.2025-10-15T17-29-55Z
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio-data:/data
+volumes:
+  minio-data:

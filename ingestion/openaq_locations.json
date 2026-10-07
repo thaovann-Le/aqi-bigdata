@@ -1,0 +1,2032 @@
+[
+ {
+  "id": 18,
+  "name": "SPARTAN - Vietnam Acad. Sci.",
+  "city": "hanoi",
+  "lat": 21.048,
+  "lon": 105.8,
+  "first": null,
+  "last": null,
+  "parameters": [
+   "pm25"
+  ],
+  "sensors": [
+   {
+    "id": 37,
+    "parameter": "pm25",
+    "units": "µg/m³"
+   }
+  ]
+ },
+ {
+  "id": 2539,
+  "name": "US Diplomatic Post: Hanoi",
+  "city": "hanoi",
+  "lat": 21.02177,
+  "lon": 105.819002,
+  "first": "2016-01-30T01:00:00Z",
+  "last": "2016-11-09T16:00:00Z",
+  "parameters": [
+   "pm25"
+  ],
+  "sensors": [
+   {
+    "id": 5049,
+    "parameter": "pm25",
+    "units": "µg/m³"
+   }
+  ]
+ },
+ {
+  "id": 7441,
+  "name": "Hanoi",
+  "city": "hanoi",
+  "lat": 21.021939,
+  "lon": 105.818806,
+  "first": "2016-11-09T18:00:00Z",
+  "last": "2025-04-09T15:00:00Z",
+  "parameters": [
+   "pm25"
+  ],
+  "sensors": [
+   {
+    "id": 21632,
+    "parameter": "pm25",
+    "units": "µg/m³"
+   }
+  ]
+ },
+ {
+  "id": 307169,
+  "name": "nồng độ pm",
+  "city": "hanoi",
+  "lat": 21.027764483,
+  "lon": 105.834159739,
+  "first": null,
+  "last": null,
+  "parameters": [
+   "pm25"
+  ],
+  "sensors": [
+   {
+    "id": 1742521,
+    "parameter": "pm25",
+    "units": "µg/m³"
+   }
+  ]
+ },
+ {
+  "id": 1285357,
+  "name": "SPARTAN - Vietnam Acad. Sci.",
+  "city": "hanoi",
+  "lat": 21.0478,
+  "lon": 105.8,
+  "first": "2019-11-28T03:00:00Z",
+  "last": "2020-06-23T14:00:00Z",
+  "parameters": [
+   "pm25"
+  ],
+  "sensors": [
+   {
+    "id": 6566240,
+    "parameter": "pm25",
+    "units": "µg/m³"
+   }
+  ]
+ },
+ {
+  "id": 2161290,
+  "name": "An Khánh",
+  "city": "hanoi",
+  "lat": 21.0024,
+  "lon": 105.7181,
+  "first": "2024-01-29T06:00:00Z",
+  "last": "2025-06-10T03:00:00Z",
+  "parameters": [
+   "co",
+   "no2",
+   "pm10",
+   "pm25"
+  ],
+  "sensors": [
+   {
+    "id": 7771981,
+    "parameter": "co",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772033,
+    "parameter": "no2",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772095,
+    "parameter": "pm10",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772012,
+    "parameter": "pm25",
+    "units": "µg/m³"
+   }
+  ]
+ },
+ {
+  "id": 2161291,
+  "name": "Cầu Diễn",
+  "city": "hanoi",
+  "lat": 21.0398,
+  "lon": 105.7652,
+  "first": "2024-01-22T01:00:00Z",
+  "last": "2024-12-11T14:00:00Z",
+  "parameters": [
+   "co",
+   "no2",
+   "pm10",
+   "pm25"
+  ],
+  "sensors": [
+   {
+    "id": 7772103,
+    "parameter": "co",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7771974,
+    "parameter": "no2",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772105,
+    "parameter": "pm10",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772023,
+    "parameter": "pm25",
+    "units": "µg/m³"
+   }
+  ]
+ },
+ {
+  "id": 2161292,
+  "name": "Số 46, phố Lưu Quang Vũ",
+  "city": "hanoi",
+  "lat": 21.0152,
+  "lon": 105.7999,
+  "first": "2024-01-29T16:00:00Z",
+  "last": "2026-10-06T02:00:00Z",
+  "parameters": [
+   "co",
+   "no2",
+   "o3",
+   "pm10",
+   "pm25",
+   "so2"
+  ],
+  "sensors": [
+   {
+    "id": 7772024,
+    "parameter": "co",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7888636,
+    "parameter": "no2",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772022,
+    "parameter": "o3",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772048,
+    "parameter": "pm10",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772032,
+    "parameter": "pm25",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7771973,
+    "parameter": "so2",
+    "units": "µg/m³"
+   }
+  ]
+ },
+ {
+  "id": 2161293,
+  "name": "Chúc Sơn",
+  "city": "hanoi",
+  "lat": 20.92,
+  "lon": 105.7123,
+  "first": "2024-01-09T21:00:00Z",
+  "last": "2025-02-05T08:00:00Z",
+  "parameters": [
+   "co",
+   "no2",
+   "pm10",
+   "pm25"
+  ],
+  "sensors": [
+   {
+    "id": 7772064,
+    "parameter": "co",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772027,
+    "parameter": "no2",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772077,
+    "parameter": "pm10",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772046,
+    "parameter": "pm25",
+    "units": "µg/m³"
+   }
+  ]
+ },
+ {
+  "id": 2161294,
+  "name": "Cung thiếu nhi",
+  "city": "hanoi",
+  "lat": 21.0284,
+  "lon": 105.8556,
+  "first": "2024-01-29T06:00:00Z",
+  "last": "2025-02-05T03:00:00Z",
+  "parameters": [
+   "co",
+   "no2",
+   "pm10",
+   "pm25"
+  ],
+  "sensors": [
+   {
+    "id": 7772083,
+    "parameter": "co",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7771978,
+    "parameter": "no2",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772082,
+    "parameter": "pm10",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772104,
+    "parameter": "pm25",
+    "units": "µg/m³"
+   }
+  ]
+ },
+ {
+  "id": 2161295,
+  "name": "Đầm Trấu",
+  "city": "hanoi",
+  "lat": 21.0119,
+  "lon": 105.8644,
+  "first": "2024-01-29T06:00:00Z",
+  "last": "2024-01-30T08:00:00Z",
+  "parameters": [
+   "co",
+   "no2",
+   "pm10",
+   "pm25"
+  ],
+  "sensors": [
+   {
+    "id": 7772081,
+    "parameter": "co",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772045,
+    "parameter": "no2",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7771991,
+    "parameter": "pm10",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7771992,
+    "parameter": "pm25",
+    "units": "µg/m³"
+   }
+  ]
+ },
+ {
+  "id": 2161296,
+  "name": "Đào Duy Từ",
+  "city": "hanoi",
+  "lat": 21.0354,
+  "lon": 105.8529,
+  "first": "2024-01-15T07:00:00Z",
+  "last": "2025-06-10T03:00:00Z",
+  "parameters": [
+   "co",
+   "no2",
+   "pm10",
+   "pm25"
+  ],
+  "sensors": [
+   {
+    "id": 7771983,
+    "parameter": "co",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772030,
+    "parameter": "no2",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772101,
+    "parameter": "pm10",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772040,
+    "parameter": "pm25",
+    "units": "µg/m³"
+   }
+  ]
+ },
+ {
+  "id": 2161298,
+  "name": "Đông Kinh Nghĩa Thục",
+  "city": "hanoi",
+  "lat": 21.032,
+  "lon": 105.8515,
+  "first": "2024-01-29T06:00:00Z",
+  "last": "2024-04-15T09:00:00Z",
+  "parameters": [
+   "co",
+   "no2",
+   "pm10",
+   "pm25"
+  ],
+  "sensors": [
+   {
+    "id": 7772090,
+    "parameter": "co",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772026,
+    "parameter": "no2",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772085,
+    "parameter": "pm10",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772025,
+    "parameter": "pm25",
+    "units": "µg/m³"
+   }
+  ]
+ },
+ {
+  "id": 2161299,
+  "name": "Hàng Đậu",
+  "city": "hanoi",
+  "lat": 21.0399,
+  "lon": 105.8473,
+  "first": "2024-01-29T07:00:00Z",
+  "last": "2024-11-26T18:00:00Z",
+  "parameters": [
+   "co",
+   "no2",
+   "pm10",
+   "pm25"
+  ],
+  "sensors": [
+   {
+    "id": 7772019,
+    "parameter": "co",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772102,
+    "parameter": "no2",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772005,
+    "parameter": "pm10",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7771996,
+    "parameter": "pm25",
+    "units": "µg/m³"
+   }
+  ]
+ },
+ {
+  "id": 2161300,
+  "name": "Hoàn Kiếm",
+  "city": "hanoi",
+  "lat": 21.0263,
+  "lon": 105.8515,
+  "first": "2024-01-29T06:00:00Z",
+  "last": "2024-01-31T23:00:00Z",
+  "parameters": [
+   "co",
+   "no2",
+   "pm10",
+   "pm25"
+  ],
+  "sensors": [
+   {
+    "id": 7772043,
+    "parameter": "co",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7771987,
+    "parameter": "no2",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772000,
+    "parameter": "pm10",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7771988,
+    "parameter": "pm25",
+    "units": "µg/m³"
+   }
+  ]
+ },
+ {
+  "id": 2161301,
+  "name": "Khương Trung",
+  "city": "hanoi",
+  "lat": 20.9949,
+  "lon": 105.8167,
+  "first": "2024-01-29T06:00:00Z",
+  "last": "2024-12-11T15:00:00Z",
+  "parameters": [
+   "co",
+   "no2",
+   "pm10",
+   "pm25"
+  ],
+  "sensors": [
+   {
+    "id": 7772052,
+    "parameter": "co",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772050,
+    "parameter": "no2",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772039,
+    "parameter": "pm10",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772073,
+    "parameter": "pm25",
+    "units": "µg/m³"
+   }
+  ]
+ },
+ {
+  "id": 2161302,
+  "name": "Kim Bài",
+  "city": "hanoi",
+  "lat": 20.858,
+  "lon": 105.7656,
+  "first": "2024-01-29T06:00:00Z",
+  "last": "2024-12-08T15:00:00Z",
+  "parameters": [
+   "co",
+   "no2",
+   "pm10",
+   "pm25"
+  ],
+  "sensors": [
+   {
+    "id": 7772069,
+    "parameter": "co",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772107,
+    "parameter": "no2",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7771997,
+    "parameter": "pm10",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7771977,
+    "parameter": "pm25",
+    "units": "µg/m³"
+   }
+  ]
+ },
+ {
+  "id": 2161303,
+  "name": "Kim Liên",
+  "city": "hanoi",
+  "lat": 21.0074,
+  "lon": 105.8358,
+  "first": "2024-01-29T06:00:00Z",
+  "last": "2024-03-22T06:00:00Z",
+  "parameters": [
+   "co",
+   "no2",
+   "pm10",
+   "pm25"
+  ],
+  "sensors": [
+   {
+    "id": 7772080,
+    "parameter": "co",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772093,
+    "parameter": "no2",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772018,
+    "parameter": "pm10",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772038,
+    "parameter": "pm25",
+    "units": "µg/m³"
+   }
+  ]
+ },
+ {
+  "id": 2161304,
+  "name": "Lê Trực",
+  "city": "hanoi",
+  "lat": 21.0327,
+  "lon": 105.8329,
+  "first": "2024-01-29T06:00:00Z",
+  "last": "2024-01-31T00:00:00Z",
+  "parameters": [
+   "co",
+   "no2",
+   "pm10",
+   "pm25"
+  ],
+  "sensors": [
+   {
+    "id": 7772010,
+    "parameter": "co",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772021,
+    "parameter": "no2",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7771993,
+    "parameter": "pm10",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772096,
+    "parameter": "pm25",
+    "units": "µg/m³"
+   }
+  ]
+ },
+ {
+  "id": 2161305,
+  "name": "Liên Quan",
+  "city": "hanoi",
+  "lat": 21.056,
+  "lon": 105.578,
+  "first": "2024-01-23T22:00:00Z",
+  "last": "2025-02-05T06:00:00Z",
+  "parameters": [
+   "co",
+   "no2",
+   "pm10",
+   "pm25"
+  ],
+  "sensors": [
+   {
+    "id": 7772106,
+    "parameter": "co",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772013,
+    "parameter": "no2",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772029,
+    "parameter": "pm10",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772053,
+    "parameter": "pm25",
+    "units": "µg/m³"
+   }
+  ]
+ },
+ {
+  "id": 2161306,
+  "name": "Minh Khai - Bắc Từ Liêm",
+  "city": "hanoi",
+  "lat": 21.05,
+  "lon": 105.74,
+  "first": "2024-01-29T16:00:00Z",
+  "last": "2026-10-06T02:00:00Z",
+  "parameters": [
+   "co",
+   "no2",
+   "o3",
+   "pm10",
+   "pm25",
+   "so2"
+  ],
+  "sensors": [
+   {
+    "id": 7771995,
+    "parameter": "co",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772100,
+    "parameter": "no2",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772097,
+    "parameter": "o3",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772055,
+    "parameter": "pm10",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772087,
+    "parameter": "pm25",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772047,
+    "parameter": "so2",
+    "units": "µg/m³"
+   }
+  ]
+ },
+ {
+  "id": 2161307,
+  "name": "Mỹ Đình",
+  "city": "hanoi",
+  "lat": 21.0269,
+  "lon": 105.7731,
+  "first": "2024-01-28T22:00:00Z",
+  "last": "2024-01-30T04:00:00Z",
+  "parameters": [
+   "co",
+   "no2",
+   "pm10",
+   "pm25"
+  ],
+  "sensors": [
+   {
+    "id": 7772063,
+    "parameter": "co",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772108,
+    "parameter": "no2",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772031,
+    "parameter": "pm10",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7771998,
+    "parameter": "pm25",
+    "units": "µg/m³"
+   }
+  ]
+ },
+ {
+  "id": 2161308,
+  "name": "Phạm Văn Đồng",
+  "city": "hanoi",
+  "lat": 21.05,
+  "lon": 105.782,
+  "first": "2024-01-22T07:00:00Z",
+  "last": "2024-01-22T08:00:00Z",
+  "parameters": [
+   "co",
+   "no2",
+   "pm10",
+   "pm25"
+  ],
+  "sensors": [
+   {
+    "id": 7772051,
+    "parameter": "co",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772056,
+    "parameter": "no2",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772110,
+    "parameter": "pm10",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772088,
+    "parameter": "pm25",
+    "units": "µg/m³"
+   }
+  ]
+ },
+ {
+  "id": 2161309,
+  "name": "Pháp Vân",
+  "city": "hanoi",
+  "lat": 20.9481,
+  "lon": 105.8493,
+  "first": "2024-01-29T06:00:00Z",
+  "last": "2025-02-05T04:00:00Z",
+  "parameters": [
+   "co",
+   "no2",
+   "pm10",
+   "pm25"
+  ],
+  "sensors": [
+   {
+    "id": 7772084,
+    "parameter": "co",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772091,
+    "parameter": "no2",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772014,
+    "parameter": "pm10",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772016,
+    "parameter": "pm25",
+    "units": "µg/m³"
+   }
+  ]
+ },
+ {
+  "id": 2161310,
+  "name": "Quảng Phú Cầu",
+  "city": "hanoi",
+  "lat": 20.7793,
+  "lon": 105.7851,
+  "first": "2024-01-29T06:00:00Z",
+  "last": "2024-12-07T13:00:00Z",
+  "parameters": [
+   "co",
+   "no2",
+   "pm10",
+   "pm25"
+  ],
+  "sensors": [
+   {
+    "id": 7772065,
+    "parameter": "co",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772008,
+    "parameter": "no2",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772001,
+    "parameter": "pm10",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772109,
+    "parameter": "pm25",
+    "units": "µg/m³"
+   }
+  ]
+ },
+ {
+  "id": 2161311,
+  "name": "Sài Sơn",
+  "city": "hanoi",
+  "lat": 21.0167,
+  "lon": 105.6478,
+  "first": "2024-01-23T22:00:00Z",
+  "last": "2025-02-05T08:00:00Z",
+  "parameters": [
+   "co",
+   "no2",
+   "pm10",
+   "pm25"
+  ],
+  "sensors": [
+   {
+    "id": 7772058,
+    "parameter": "co",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7771975,
+    "parameter": "no2",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772049,
+    "parameter": "pm10",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772076,
+    "parameter": "pm25",
+    "units": "µg/m³"
+   }
+  ]
+ },
+ {
+  "id": 2161312,
+  "name": "Sóc Sơn",
+  "city": "hanoi",
+  "lat": 21.2575,
+  "lon": 105.8514,
+  "first": "2024-01-29T15:00:00Z",
+  "last": "2025-03-19T09:00:00Z",
+  "parameters": [
+   "co",
+   "no2",
+   "pm10",
+   "pm25"
+  ],
+  "sensors": [
+   {
+    "id": 7772011,
+    "parameter": "co",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772044,
+    "parameter": "no2",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772089,
+    "parameter": "pm10",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772037,
+    "parameter": "pm25",
+    "units": "µg/m³"
+   }
+  ]
+ },
+ {
+  "id": 2161313,
+  "name": "Tân Mai",
+  "city": "hanoi",
+  "lat": 20.9883,
+  "lon": 105.8549,
+  "first": "2024-01-29T06:00:00Z",
+  "last": "2024-03-01T04:00:00Z",
+  "parameters": [
+   "co",
+   "no2",
+   "pm10",
+   "pm25"
+  ],
+  "sensors": [
+   {
+    "id": 7772094,
+    "parameter": "co",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772098,
+    "parameter": "no2",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772034,
+    "parameter": "pm10",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772003,
+    "parameter": "pm25",
+    "units": "µg/m³"
+   }
+  ]
+ },
+ {
+  "id": 2161314,
+  "name": "Tây Hồ Tây",
+  "city": "hanoi",
+  "lat": 21.0563,
+  "lon": 105.7974,
+  "first": "2024-01-29T06:00:00Z",
+  "last": "2024-03-22T09:00:00Z",
+  "parameters": [
+   "co",
+   "no2",
+   "pm10",
+   "pm25"
+  ],
+  "sensors": [
+   {
+    "id": 7772054,
+    "parameter": "co",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772066,
+    "parameter": "no2",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7771982,
+    "parameter": "pm10",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7771972,
+    "parameter": "pm25",
+    "units": "µg/m³"
+   }
+  ]
+ },
+ {
+  "id": 2161315,
+  "name": "Tây Mỗ",
+  "city": "hanoi",
+  "lat": 21.0058,
+  "lon": 105.7485,
+  "first": "2024-01-29T06:00:00Z",
+  "last": "2024-02-07T00:00:00Z",
+  "parameters": [
+   "co",
+   "no2",
+   "pm10",
+   "pm25"
+  ],
+  "sensors": [
+   {
+    "id": 7772072,
+    "parameter": "co",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772002,
+    "parameter": "no2",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772009,
+    "parameter": "pm10",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772004,
+    "parameter": "pm25",
+    "units": "µg/m³"
+   }
+  ]
+ },
+ {
+  "id": 2161316,
+  "name": "Thành Công",
+  "city": "hanoi",
+  "lat": 21.0197,
+  "lon": 105.8147,
+  "first": "2024-01-29T06:00:00Z",
+  "last": "2024-02-27T00:00:00Z",
+  "parameters": [
+   "co",
+   "no2",
+   "pm10",
+   "pm25"
+  ],
+  "sensors": [
+   {
+    "id": 7772078,
+    "parameter": "co",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772007,
+    "parameter": "no2",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772060,
+    "parameter": "pm10",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772020,
+    "parameter": "pm25",
+    "units": "µg/m³"
+   }
+  ]
+ },
+ {
+  "id": 2161317,
+  "name": "Thanh Xuân - Sóc Sơn",
+  "city": "hanoi",
+  "lat": 21.2287,
+  "lon": 105.7583,
+  "first": "2024-01-29T06:00:00Z",
+  "last": "2024-09-09T17:00:00Z",
+  "parameters": [
+   "co",
+   "no2",
+   "pm10",
+   "pm25"
+  ],
+  "sensors": [
+   {
+    "id": 7771976,
+    "parameter": "co",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772067,
+    "parameter": "no2",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772006,
+    "parameter": "pm10",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772068,
+    "parameter": "pm25",
+    "units": "µg/m³"
+   }
+  ]
+ },
+ {
+  "id": 2161318,
+  "name": "Tứ Liên",
+  "city": "hanoi",
+  "lat": 21.0639,
+  "lon": 105.8338,
+  "first": "2024-01-29T06:00:00Z",
+  "last": "2024-03-22T04:00:00Z",
+  "parameters": [
+   "co",
+   "no2",
+   "pm10",
+   "pm25"
+  ],
+  "sensors": [
+   {
+    "id": 7772074,
+    "parameter": "co",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772070,
+    "parameter": "no2",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7771994,
+    "parameter": "pm10",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772036,
+    "parameter": "pm25",
+    "units": "µg/m³"
+   }
+  ]
+ },
+ {
+  "id": 2161319,
+  "name": "Vân Đình",
+  "city": "hanoi",
+  "lat": 20.7339,
+  "lon": 105.7703,
+  "first": "2024-01-29T06:00:00Z",
+  "last": "2025-02-05T04:00:00Z",
+  "parameters": [
+   "co",
+   "no2",
+   "pm10",
+   "pm25"
+  ],
+  "sensors": [
+   {
+    "id": 7772061,
+    "parameter": "co",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772057,
+    "parameter": "no2",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772075,
+    "parameter": "pm10",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7771984,
+    "parameter": "pm25",
+    "units": "µg/m³"
+   }
+  ]
+ },
+ {
+  "id": 2161320,
+  "name": "Vân Hà",
+  "city": "hanoi",
+  "lat": 21.1476,
+  "lon": 105.9159,
+  "first": "2024-01-29T15:00:00Z",
+  "last": "2025-06-10T03:00:00Z",
+  "parameters": [
+   "co",
+   "no2",
+   "pm10",
+   "pm25"
+  ],
+  "sensors": [
+   {
+    "id": 7772041,
+    "parameter": "co",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7771986,
+    "parameter": "no2",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772035,
+    "parameter": "pm10",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772059,
+    "parameter": "pm25",
+    "units": "µg/m³"
+   }
+  ]
+ },
+ {
+  "id": 2161321,
+  "name": "Văn Quán",
+  "city": "hanoi",
+  "lat": 20.972,
+  "lon": 105.7856,
+  "first": "2024-01-29T06:00:00Z",
+  "last": "2024-04-05T00:00:00Z",
+  "parameters": [
+   "co",
+   "no2",
+   "pm10",
+   "pm25"
+  ],
+  "sensors": [
+   {
+    "id": 7771990,
+    "parameter": "co",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772028,
+    "parameter": "no2",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772062,
+    "parameter": "pm10",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772099,
+    "parameter": "pm25",
+    "units": "µg/m³"
+   }
+  ]
+ },
+ {
+  "id": 2161322,
+  "name": "Võng La",
+  "city": "hanoi",
+  "lat": 21.1105,
+  "lon": 105.7605,
+  "first": "2024-01-15T07:00:00Z",
+  "last": "2024-01-15T09:00:00Z",
+  "parameters": [
+   "co",
+   "no2",
+   "pm10",
+   "pm25"
+  ],
+  "sensors": [
+   {
+    "id": 7771985,
+    "parameter": "co",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7771989,
+    "parameter": "no2",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772071,
+    "parameter": "pm10",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772079,
+    "parameter": "pm25",
+    "units": "µg/m³"
+   }
+  ]
+ },
+ {
+  "id": 2161323,
+  "name": "Xuân Mai",
+  "city": "hanoi",
+  "lat": 20.8994,
+  "lon": 105.5773,
+  "first": "2024-01-29T06:00:00Z",
+  "last": "2025-03-17T01:00:00Z",
+  "parameters": [
+   "co",
+   "no2",
+   "pm10",
+   "pm25"
+  ],
+  "sensors": [
+   {
+    "id": 7771999,
+    "parameter": "co",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772042,
+    "parameter": "no2",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772092,
+    "parameter": "pm10",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772015,
+    "parameter": "pm25",
+    "units": "µg/m³"
+   }
+  ]
+ },
+ {
+  "id": 4946811,
+  "name": "556 Nguyễn Văn Cừ",
+  "city": "hanoi",
+  "lat": 21.0491,
+  "lon": 105.8831,
+  "first": "2025-07-03T15:40:00Z",
+  "last": "2026-07-15T10:05:00Z",
+  "parameters": [
+   "co",
+   "no2",
+   "o3",
+   "pm10",
+   "pm25",
+   "so2"
+  ],
+  "sensors": [
+   {
+    "id": 13502158,
+    "parameter": "co",
+    "units": "µg/m³"
+   },
+   {
+    "id": 13502159,
+    "parameter": "no2",
+    "units": "µg/m³"
+   },
+   {
+    "id": 13502160,
+    "parameter": "o3",
+    "units": "µg/m³"
+   },
+   {
+    "id": 13502165,
+    "parameter": "pm10",
+    "units": "µg/m³"
+   },
+   {
+    "id": 13502150,
+    "parameter": "pm25",
+    "units": "µg/m³"
+   },
+   {
+    "id": 13502161,
+    "parameter": "so2",
+    "units": "µg/m³"
+   }
+  ]
+ },
+ {
+  "id": 4946812,
+  "name": "Công viên Nhân Chính - Khuất Duy Tiến",
+  "city": "hanoi",
+  "lat": 21.0031,
+  "lon": 105.7947,
+  "first": "2025-07-03T15:40:00Z",
+  "last": "2026-10-06T16:20:00Z",
+  "parameters": [
+   "co",
+   "no2",
+   "o3",
+   "pm10",
+   "pm25",
+   "so2"
+  ],
+  "sensors": [
+   {
+    "id": 13502163,
+    "parameter": "co",
+    "units": "µg/m³"
+   },
+   {
+    "id": 13502162,
+    "parameter": "no2",
+    "units": "µg/m³"
+   },
+   {
+    "id": 13502148,
+    "parameter": "o3",
+    "units": "µg/m³"
+   },
+   {
+    "id": 13502153,
+    "parameter": "pm10",
+    "units": "µg/m³"
+   },
+   {
+    "id": 13502151,
+    "parameter": "pm25",
+    "units": "µg/m³"
+   },
+   {
+    "id": 13502157,
+    "parameter": "so2",
+    "units": "µg/m³"
+   }
+  ]
+ },
+ {
+  "id": 4946813,
+  "name": "Số 1 đường Giải Phóng - phường Bạch Mai - ĐHBK ",
+  "city": "hanoi",
+  "lat": 21.0052,
+  "lon": 105.8418,
+  "first": "2025-07-03T15:40:00Z",
+  "last": "2026-10-06T16:20:00Z",
+  "parameters": [
+   "co",
+   "no2",
+   "o3",
+   "pm10",
+   "pm25",
+   "so2"
+  ],
+  "sensors": [
+   {
+    "id": 13502156,
+    "parameter": "co",
+    "units": "µg/m³"
+   },
+   {
+    "id": 13502155,
+    "parameter": "no2",
+    "units": "µg/m³"
+   },
+   {
+    "id": 13502149,
+    "parameter": "o3",
+    "units": "µg/m³"
+   },
+   {
+    "id": 13502152,
+    "parameter": "pm10",
+    "units": "µg/m³"
+   },
+   {
+    "id": 13502154,
+    "parameter": "pm25",
+    "units": "µg/m³"
+   },
+   {
+    "id": 13502164,
+    "parameter": "so2",
+    "units": "µg/m³"
+   }
+  ]
+ },
+ {
+  "id": 6123215,
+  "name": "OceanPark",
+  "city": "hanoi",
+  "lat": 20.9933,
+  "lon": 105.9441,
+  "first": "2025-11-08T06:00:00Z",
+  "last": "2026-10-06T16:00:00Z",
+  "parameters": [
+   "pm1",
+   "pm25",
+   "relativehumidity",
+   "temperature",
+   "um003"
+  ],
+  "sensors": [
+   {
+    "id": 14581374,
+    "parameter": "pm1",
+    "units": "µg/m³"
+   },
+   {
+    "id": 14581375,
+    "parameter": "pm25",
+    "units": "µg/m³"
+   },
+   {
+    "id": 14581376,
+    "parameter": "relativehumidity",
+    "units": "%"
+   },
+   {
+    "id": 14581377,
+    "parameter": "temperature",
+    "units": "c"
+   },
+   {
+    "id": 14581378,
+    "parameter": "um003",
+    "units": "particles/cm³"
+   }
+  ]
+ },
+ {
+  "id": 2446,
+  "name": "US Diplomatic Post: Ho Chi Minh City",
+  "city": "hcm",
+  "lat": 10.783041,
+  "lon": 106.700722,
+  "first": "2016-02-29T01:00:00Z",
+  "last": "2016-11-09T16:00:00Z",
+  "parameters": [
+   "pm25"
+  ],
+  "sensors": [
+   {
+    "id": 4681,
+    "parameter": "pm25",
+    "units": "µg/m³"
+   }
+  ]
+ },
+ {
+  "id": 7440,
+  "name": "US Diplomatic Post: Ho Chi Minh City",
+  "city": "hcm",
+  "lat": 10.782773,
+  "lon": 106.700035,
+  "first": "2016-11-09T17:00:00Z",
+  "last": "2025-03-04T12:00:00Z",
+  "parameters": [
+   "pm25"
+  ],
+  "sensors": [
+   {
+    "id": 21631,
+    "parameter": "pm25",
+    "units": "µg/m³"
+   }
+  ]
+ },
+ {
+  "id": 268816,
+  "name": "outdoor",
+  "city": "hcm",
+  "lat": 10.694526659,
+  "lon": 106.721235998,
+  "first": null,
+  "last": null,
+  "parameters": [
+   "pm25"
+  ],
+  "sensors": [
+   {
+    "id": 1552804,
+    "parameter": "pm25",
+    "units": "µg/m³"
+   }
+  ]
+ },
+ {
+  "id": 268821,
+  "name": "outdoor2",
+  "city": "hcm",
+  "lat": 10.694870278,
+  "lon": 106.721544452,
+  "first": null,
+  "last": null,
+  "parameters": [
+   "pm25"
+  ],
+  "sensors": [
+   {
+    "id": 1552809,
+    "parameter": "pm25",
+    "units": "µg/m³"
+   }
+  ]
+ },
+ {
+  "id": 268929,
+  "name": "od3",
+  "city": "hcm",
+  "lat": 10.694685455,
+  "lon": 106.721574962,
+  "first": null,
+  "last": null,
+  "parameters": [
+   "pm25"
+  ],
+  "sensors": [
+   {
+    "id": 1553310,
+    "parameter": "pm25",
+    "units": "µg/m³"
+   }
+  ]
+ },
+ {
+  "id": 268935,
+  "name": "od5",
+  "city": "hcm",
+  "lat": 10.715946249,
+  "lon": 106.729752682,
+  "first": null,
+  "last": null,
+  "parameters": [
+   "pm25"
+  ],
+  "sensors": [
+   {
+    "id": 1553316,
+    "parameter": "pm25",
+    "units": "µg/m³"
+   }
+  ]
+ },
+ {
+  "id": 268937,
+  "name": "od6",
+  "city": "hcm",
+  "lat": 10.694870278,
+  "lon": 106.721540764,
+  "first": null,
+  "last": null,
+  "parameters": [
+   "pm25"
+  ],
+  "sensors": [
+   {
+    "id": 1553318,
+    "parameter": "pm25",
+    "units": "µg/m³"
+   }
+  ]
+ },
+ {
+  "id": 3276359,
+  "name": "CMT8",
+  "city": "hcm",
+  "lat": 10.78533,
+  "lon": 106.67029,
+  "first": "2024-11-19T11:00:00Z",
+  "last": "2026-10-06T16:00:00Z",
+  "parameters": [
+   "pm1",
+   "pm10",
+   "pm25",
+   "relativehumidity",
+   "temperature",
+   "um003"
+  ],
+  "sensors": [
+   {
+    "id": 11357396,
+    "parameter": "pm1",
+    "units": "µg/m³"
+   },
+   {
+    "id": 11357395,
+    "parameter": "pm10",
+    "units": "µg/m³"
+   },
+   {
+    "id": 11357424,
+    "parameter": "pm25",
+    "units": "µg/m³"
+   },
+   {
+    "id": 11357398,
+    "parameter": "relativehumidity",
+    "units": "%"
+   },
+   {
+    "id": 11357401,
+    "parameter": "temperature",
+    "units": "c"
+   },
+   {
+    "id": 11357394,
+    "parameter": "um003",
+    "units": "particles/cm³"
+   }
+  ]
+ },
+ {
+  "id": 4743591,
+  "name": "Trường Đại học Khoa học Tự nhiên, ĐHQG-HCM, Cơ sở Linh Trung.",
+  "city": "hcm",
+  "lat": 10.876939,
+  "lon": 106.797617,
+  "first": "2025-06-15T05:00:00Z",
+  "last": "2025-06-15T08:00:00Z",
+  "parameters": [
+   "pm1",
+   "pm25",
+   "relativehumidity",
+   "temperature",
+   "um003"
+  ],
+  "sensors": [
+   {
+    "id": 13332025,
+    "parameter": "pm1",
+    "units": "µg/m³"
+   },
+   {
+    "id": 13332026,
+    "parameter": "pm25",
+    "units": "µg/m³"
+   },
+   {
+    "id": 13332027,
+    "parameter": "relativehumidity",
+    "units": "%"
+   },
+   {
+    "id": 13332028,
+    "parameter": "temperature",
+    "units": "c"
+   },
+   {
+    "id": 13332029,
+    "parameter": "um003",
+    "units": "particles/cm³"
+   }
+  ]
+ },
+ {
+  "id": 6068138,
+  "name": "Care Centre",
+  "city": "hcm",
+  "lat": 10.774491,
+  "lon": 106.661026,
+  "first": "2025-10-09T01:00:00Z",
+  "last": "2025-12-08T02:00:00Z",
+  "parameters": [
+   "pm1",
+   "pm25",
+   "relativehumidity",
+   "temperature",
+   "um003"
+  ],
+  "sensors": [
+   {
+    "id": 14325345,
+    "parameter": "pm1",
+    "units": "µg/m³"
+   },
+   {
+    "id": 14325346,
+    "parameter": "pm25",
+    "units": "µg/m³"
+   },
+   {
+    "id": 14325347,
+    "parameter": "relativehumidity",
+    "units": "%"
+   },
+   {
+    "id": 14325348,
+    "parameter": "temperature",
+    "units": "c"
+   },
+   {
+    "id": 14325349,
+    "parameter": "um003",
+    "units": "particles/cm³"
+   }
+  ]
+ },
+ {
+  "id": 6273386,
+  "name": "VNUHCMUS CAMPUS 1",
+  "city": "hcm",
+  "lat": 10.761968,
+  "lon": 106.682582,
+  "first": "2026-03-16T03:00:00Z",
+  "last": "2026-03-30T05:00:00Z",
+  "parameters": [
+   "pm1",
+   "pm25",
+   "relativehumidity",
+   "temperature",
+   "um003"
+  ],
+  "sensors": [
+   {
+    "id": 15694533,
+    "parameter": "pm1",
+    "units": "µg/m³"
+   },
+   {
+    "id": 15694534,
+    "parameter": "pm25",
+    "units": "µg/m³"
+   },
+   {
+    "id": 15694535,
+    "parameter": "relativehumidity",
+    "units": "%"
+   },
+   {
+    "id": 15694536,
+    "parameter": "temperature",
+    "units": "c"
+   },
+   {
+    "id": 15694537,
+    "parameter": "um003",
+    "units": "particles/cm³"
+   }
+  ]
+ },
+ {
+  "id": 6473874,
+  "name": "Ngoai phong",
+  "city": "hcm",
+  "lat": 10.844841172,
+  "lon": 106.794992387,
+  "first": "2026-08-04T10:29:06Z",
+  "last": "2026-08-05T16:48:10Z",
+  "parameters": [
+   "pm25"
+  ],
+  "sensors": [
+   {
+    "id": 17137235,
+    "parameter": "pm25",
+    "units": "µg/m³"
+   }
+  ]
+ },
+ {
+  "id": 6475641,
+  "name": "Lầu 2 VP ngoài nhà",
+  "city": "hcm",
+  "lat": 10.8437064,
+  "lon": 106.7952085,
+  "first": "2026-08-05T16:49:46Z",
+  "last": "2026-08-06T16:59:36Z",
+  "parameters": [
+   "pm25"
+  ],
+  "sensors": [
+   {
+    "id": 17150189,
+    "parameter": "pm25",
+    "units": "µg/m³"
+   }
+  ]
+ },
+ {
+  "id": 6477970,
+  "name": "Ngoai nha",
+  "city": "hcm",
+  "lat": 10.8437064,
+  "lon": 106.7952085,
+  "first": "2026-08-07T07:54:40Z",
+  "last": "2026-08-19T07:40:33Z",
+  "parameters": [
+   "pm25"
+  ],
+  "sensors": [
+   {
+    "id": 17167220,
+    "parameter": "pm25",
+    "units": "µg/m³"
+   }
+  ]
+ },
+ {
+  "id": 6477971,
+  "name": "Ngoai nha",
+  "city": "hcm",
+  "lat": 10.8437064,
+  "lon": 106.7952085,
+  "first": "2026-08-07T07:52:19Z",
+  "last": "2026-08-07T07:52:19Z",
+  "parameters": [
+   "pm25"
+  ],
+  "sensors": [
+   {
+    "id": 17167219,
+    "parameter": "pm25",
+    "units": "µg/m³"
+   }
+  ]
+ },
+ {
+  "id": 6497944,
+  "name": "Ngoai phong",
+  "city": "hcm",
+  "lat": 10.851956346,
+  "lon": 106.772126891,
+  "first": "2026-08-20T09:55:29Z",
+  "last": "2026-08-22T03:34:14Z",
+  "parameters": [
+   "pm25"
+  ],
+  "sensors": [
+   {
+    "id": 17313797,
+    "parameter": "pm25",
+    "units": "µg/m³"
+   }
+  ]
+ },
+ {
+  "id": 6529522,
+  "name": "2E5 nn",
+  "city": "hcm",
+  "lat": 10.847022698,
+  "lon": 106.794313453,
+  "first": "2026-09-08T07:58:43Z",
+  "last": "2026-09-08T12:55:35Z",
+  "parameters": [
+   "pm25"
+  ],
+  "sensors": [
+   {
+    "id": 17545843,
+    "parameter": "pm25",
+    "units": "µg/m³"
+   }
+  ]
+ },
+ {
+  "id": 6529523,
+  "name": "Phong nuoc nn",
+  "city": "hcm",
+  "lat": 10.846920949,
+  "lon": 106.794846542,
+  "first": "2026-09-08T07:50:17Z",
+  "last": "2026-09-08T07:50:17Z",
+  "parameters": [
+   "pm25"
+  ],
+  "sensors": [
+   {
+    "id": 17545842,
+    "parameter": "pm25",
+    "units": "µg/m³"
+   }
+  ]
+ },
+ {
+  "id": 6531525,
+  "name": "E5nn",
+  "city": "hcm",
+  "lat": 10.846996684,
+  "lon": 106.794217564,
+  "first": "2026-09-09T12:43:54Z",
+  "last": "2026-09-10T11:26:37Z",
+  "parameters": [
+   "pm25"
+  ],
+  "sensors": [
+   {
+    "id": 17560414,
+    "parameter": "pm25",
+    "units": "µg/m³"
+   }
+  ]
+ },
+ {
+  "id": 2161297,
+  "name": "Đội Bình",
+  "city": "other",
+  "lat": 20.6486,
+  "lon": 105.8204,
+  "first": "2024-01-29T06:00:00Z",
+  "last": "2024-10-02T18:00:00Z",
+  "parameters": [
+   "co",
+   "no2",
+   "pm10",
+   "pm25"
+  ],
+  "sensors": [
+   {
+    "id": 7772086,
+    "parameter": "co",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7772017,
+    "parameter": "no2",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7771979,
+    "parameter": "pm10",
+    "units": "µg/m³"
+   },
+   {
+    "id": 7771980,
+    "parameter": "pm25",
+    "units": "µg/m³"
+   }
+  ]
+ }
+]

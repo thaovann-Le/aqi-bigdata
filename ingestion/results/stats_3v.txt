@@ -1,0 +1,20 @@
+== Volume: theo nguồn ==
+nguồn	số file	MB	số bản ghi
+history/openaq	81	13.17	2116508
+history/openmeteo/air_quality	252	112.95	1883952
+history/openmeteo/weather	315	145.96	2760912
+raw/aqi_raw	78	1.21	954
+raw/weather_raw	78	0.12	162
+TỔNG	804	273.40	6762488
+
+== Variety: số file theo định dạng ==
+json	567
+jsonl	156
+csv.gz	81
+
+== Velocity: bản ghi real-time theo ngày ==
+ngày	topic	số bản ghi	bản ghi/giờ (chia 24)
+date=2026-10-06	aqi_raw	42	1.8
+date=2026-10-06	weather_raw	10	0.4
+date=2026-10-07	aqi_raw	912	38.0
+date=2026-10-07	weather_raw	152	6.3
