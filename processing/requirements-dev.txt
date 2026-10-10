@@ -1,0 +1,4 @@
+# Chạy test và job cục bộ (không cần Docker). Cần Java 11 hoặc 17.
+pyspark==3.5.3
+pytest
+pandas

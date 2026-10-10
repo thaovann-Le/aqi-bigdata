@@ -1,5 +1,7 @@
 # ml/notebooks (vai D)
 
+> **Dữ liệu đầu vào (từ C):** đọc [`docs/data_contract.md`](../../docs/data_contract.md) mục 3. Bộ dữ liệu phẳng theo thành phố-giờ: `processing/_runtime/ml_dataset/` (sinh bởi `docker-compose.demo.yml`), hàm đọc mẫu: [`processing/examples/ml_data_access.py`](../../processing/examples/ml_data_access.py).
+
 Notebook khám phá dữ liệu (EDA) và phân tích tương quan.
 
 ## Việc cần làm (Ngày 1–2)

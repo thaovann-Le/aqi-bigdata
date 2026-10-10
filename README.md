@@ -67,16 +67,29 @@ docker compose down            # dừng, giữ lại volume (dữ liệu)
 docker compose down -v         # dừng và xóa toàn bộ dữ liệu (Kafka/MinIO/Cassandra/Grafana)
 ```
 
+### Chạy thử toàn bộ pipeline (hạ tầng + dữ liệu + job Spark)
+
+```bash
+docker compose -f docker-compose.demo.yml up -d
+```
+
+Một lệnh dựng hạ tầng, nạp dữ liệu mẫu (lịch sử vào MinIO, real-time vào Kafka) và chạy các job xử lý của C.
+Dùng image còn tải được sau khi Bitnami và MinIO gỡ image khỏi Docker Hub. Chi tiết, cách kiểm tra kết quả và
+xử lý lỗi: [`processing/README.md`](processing/README.md).
+
 ## Schema Cassandra
 
-Schema khởi tạo (đề xuất ban đầu, cả nhóm thống nhất lại ở Ngày 1) nằm ở
-[`infra/cassandra/schema.cql`](infra/cassandra/schema.cql): bảng `measurements`,
-`daily_agg`, `alerts`, `forecasts`. Sau khi chỉnh schema, áp dụng lại bằng:
+Schema nằm ở [`infra/cassandra/schema.cql`](infra/cassandra/schema.cql): bảng `measurements`,
+`weather_hourly`, `daily_agg`, `alerts`, `forecasts`. Ý nghĩa từng cột, đơn vị và cách đọc (cho D và A):
+[`docs/data_contract.md`](docs/data_contract.md). Sau khi chỉnh schema, áp dụng lại bằng:
 
 ```bash
 docker compose restart cassandra-init
 docker compose logs -f cassandra-init
 ```
+
+`CREATE TABLE IF NOT EXISTS` không sửa bảng đã có: khi đổi khóa chính hoặc thêm cột, xóa keyspace cũ trước
+(`docker compose exec cassandra cqlsh -e "DROP KEYSPACE aqi"`), hoặc `docker compose down -v`.
 
 ## Quy ước làm việc
 

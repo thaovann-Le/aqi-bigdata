@@ -1,0 +1,68 @@
+station_id,source,native_id,city,name,lat,lon,physical_id
+openaq:18,openaq,18,hanoi,SPARTAN - Vietnam Acad. Sci.,21.048,105.8,openaq:18
+openaq:2539,openaq,2539,hanoi,US Diplomatic Post: Hanoi,21.02177,105.819002,openaq:2539
+openaq:7441,openaq,7441,hanoi,Hanoi,21.021939,105.818806,openaq:7441
+openaq:307169,openaq,307169,hanoi,nồng độ pm,21.027764483,105.834159739,openaq:307169
+openaq:1285357,openaq,1285357,hanoi,SPARTAN - Vietnam Acad. Sci.,21.0478,105.8,openaq:1285357
+openaq:2161290,openaq,2161290,hanoi,An Khánh,21.0024,105.7181,openaq:2161290
+openaq:2161291,openaq,2161291,hanoi,Cầu Diễn,21.0398,105.7652,openaq:2161291
+openaq:2161292,openaq,2161292,hanoi,"Số 46, phố Lưu Quang Vũ",21.0152,105.7999,openaq:2161292
+openaq:2161293,openaq,2161293,hanoi,Chúc Sơn,20.92,105.7123,openaq:2161293
+openaq:2161294,openaq,2161294,hanoi,Cung thiếu nhi,21.0284,105.8556,openaq:2161294
+openaq:2161295,openaq,2161295,hanoi,Đầm Trấu,21.0119,105.8644,openaq:2161295
+openaq:2161296,openaq,2161296,hanoi,Đào Duy Từ,21.0354,105.8529,openaq:2161296
+openaq:2161298,openaq,2161298,hanoi,Đông Kinh Nghĩa Thục,21.032,105.8515,openaq:2161298
+openaq:2161299,openaq,2161299,hanoi,Hàng Đậu,21.0399,105.8473,openaq:2161299
+openaq:2161300,openaq,2161300,hanoi,Hoàn Kiếm,21.0263,105.8515,openaq:2161300
+openaq:2161301,openaq,2161301,hanoi,Khương Trung,20.9949,105.8167,openaq:2161301
+openaq:2161302,openaq,2161302,hanoi,Kim Bài,20.858,105.7656,openaq:2161302
+openaq:2161303,openaq,2161303,hanoi,Kim Liên,21.0074,105.8358,openaq:2161303
+openaq:2161304,openaq,2161304,hanoi,Lê Trực,21.0327,105.8329,openaq:2161304
+openaq:2161305,openaq,2161305,hanoi,Liên Quan,21.056,105.578,openaq:2161305
+openaq:2161306,openaq,2161306,hanoi,Minh Khai - Bắc Từ Liêm,21.05,105.74,openaq:2161306
+openaq:2161307,openaq,2161307,hanoi,Mỹ Đình,21.0269,105.7731,openaq:2161307
+openaq:2161308,openaq,2161308,hanoi,Phạm Văn Đồng,21.05,105.782,openaq:2161308
+openaq:2161309,openaq,2161309,hanoi,Pháp Vân,20.9481,105.8493,openaq:2161309
+openaq:2161310,openaq,2161310,hanoi,Quảng Phú Cầu,20.7793,105.7851,openaq:2161310
+openaq:2161311,openaq,2161311,hanoi,Sài Sơn,21.0167,105.6478,openaq:2161311
+openaq:2161312,openaq,2161312,hanoi,Sóc Sơn,21.2575,105.8514,openaq:2161312
+openaq:2161313,openaq,2161313,hanoi,Tân Mai,20.9883,105.8549,openaq:2161313
+openaq:2161314,openaq,2161314,hanoi,Tây Hồ Tây,21.0563,105.7974,openaq:2161314
+openaq:2161315,openaq,2161315,hanoi,Tây Mỗ,21.0058,105.7485,openaq:2161315
+openaq:2161316,openaq,2161316,hanoi,Thành Công,21.0197,105.8147,openaq:2161316
+openaq:2161317,openaq,2161317,hanoi,Thanh Xuân - Sóc Sơn,21.2287,105.7583,openaq:2161317
+openaq:2161318,openaq,2161318,hanoi,Tứ Liên,21.0639,105.8338,openaq:2161318
+openaq:2161319,openaq,2161319,hanoi,Vân Đình,20.7339,105.7703,openaq:2161319
+openaq:2161320,openaq,2161320,hanoi,Vân Hà,21.1476,105.9159,openaq:2161320
+openaq:2161321,openaq,2161321,hanoi,Văn Quán,20.972,105.7856,openaq:2161321
+openaq:2161322,openaq,2161322,hanoi,Võng La,21.1105,105.7605,openaq:2161322
+openaq:2161323,openaq,2161323,hanoi,Xuân Mai,20.8994,105.5773,openaq:2161323
+openaq:4946811,openaq,4946811,hanoi,556 Nguyễn Văn Cừ,21.0491,105.8831,openaq:4946811
+openaq:4946812,openaq,4946812,hanoi,Công viên Nhân Chính - Khuất Duy Tiến,21.0031,105.7947,openaq:4946812
+openaq:4946813,openaq,4946813,hanoi,Số 1 đường Giải Phóng - phường Bạch Mai - ĐHBK ,21.0052,105.8418,openaq:4946813
+openaq:6123215,openaq,6123215,hanoi,OceanPark,20.9933,105.9441,openaq:6123215
+openaq:2446,openaq,2446,hcm,US Diplomatic Post: Ho Chi Minh City,10.783041,106.700722,openaq:2446
+openaq:7440,openaq,7440,hcm,US Diplomatic Post: Ho Chi Minh City,10.782773,106.700035,openaq:7440
+openaq:268816,openaq,268816,hcm,outdoor,10.694526659,106.721235998,openaq:268816
+openaq:268821,openaq,268821,hcm,outdoor2,10.694870278,106.721544452,openaq:268821
+openaq:268929,openaq,268929,hcm,od3,10.694685455,106.721574962,openaq:268929
+openaq:268935,openaq,268935,hcm,od5,10.715946249,106.729752682,openaq:268935
+openaq:268937,openaq,268937,hcm,od6,10.694870278,106.721540764,openaq:268937
+openaq:3276359,openaq,3276359,hcm,CMT8,10.78533,106.67029,openaq:3276359
+openaq:4743591,openaq,4743591,hcm,"Trường Đại học Khoa học Tự nhiên, ĐHQG-HCM, Cơ sở Linh Trung.",10.876939,106.797617,openaq:4743591
+openaq:6068138,openaq,6068138,hcm,Care Centre,10.774491,106.661026,openaq:6068138
+openaq:6273386,openaq,6273386,hcm,VNUHCMUS CAMPUS 1,10.761968,106.682582,openaq:6273386
+openaq:6473874,openaq,6473874,hcm,Ngoai phong,10.844841172,106.794992387,openaq:6473874
+openaq:6475641,openaq,6475641,hcm,Lầu 2 VP ngoài nhà,10.8437064,106.7952085,openaq:6475641
+openaq:6477970,openaq,6477970,hcm,Ngoai nha,10.8437064,106.7952085,openaq:6477970
+openaq:6477971,openaq,6477971,hcm,Ngoai nha,10.8437064,106.7952085,openaq:6477971
+openaq:6497944,openaq,6497944,hcm,Ngoai phong,10.851956346,106.772126891,openaq:6497944
+openaq:6529522,openaq,6529522,hcm,2E5 nn,10.847022698,106.794313453,openaq:6529522
+openaq:6529523,openaq,6529523,hcm,Phong nuoc nn,10.846920949,106.794846542,openaq:6529523
+openaq:6531525,openaq,6531525,hcm,E5nn,10.846996684,106.794217564,openaq:6531525
+aqicn:1583,aqicn,1583,hanoi,"Hanoi, Vietnam (Hà Nội)",21.0491,105.8831,openaq:4946811
+aqicn:8688,aqicn,8688,hanoi,"United Nations International School of Hanoi, Vietnam (Trường Quốc tế Liên Hợp Quốc Hà Nội)",21.0811211,105.8180306,aqicn:8688
+aqicn:13026,aqicn,13026,hanoi,"Hà Nội/Chi cục BVMT, Vietnam",21.01525,105.80013,openaq:2161292
+aqicn:13251,aqicn,13251,hanoi,"Hà Nội/UBND P. Minh Khai, Bắc Từ Liêm, Vietnam",21.04975,105.74187,openaq:2161306
+model:hanoi,openmeteo_aq,hanoi,hanoi,Open-Meteo CAMS model (hanoi),,,model:hanoi
+model:hcm,openmeteo_aq,hcm,hcm,Open-Meteo CAMS model (hcm),,,model:hcm

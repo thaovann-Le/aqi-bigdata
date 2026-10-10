@@ -1,0 +1,287 @@
+# Chạy thử TOÀN BỘ pipeline (hạ tầng + nạp dữ liệu + các job Spark của phần C) bằng một lệnh:
+#
+#   docker compose -f docker-compose.demo.yml up -d
+#   docker compose -f docker-compose.demo.yml logs -f seed job-history job-stream
+#
+# Hướng dẫn đầy đủ, cách kiểm tra kết quả và xử lý lỗi: processing/README.md
+#
+# File này độc lập với docker-compose.yml chính (của A): cùng cổng dịch vụ nên hãy tắt bộ kia trước
+# (docker compose down). Khác biệt chính: dùng image còn tải được sau khi Bitnami chuyển image sang
+# bitnamilegacy (08/2025) và minio/minio bị gỡ khỏi Docker Hub (xem ingestion/docker-compose.dev.yml).
+#
+# Luồng chạy:
+#   kafka, minio, cassandra (+ *-init tạo topic/schema), spark-master, spark-worker
+#   seed          nạp lịch sử vào MinIO `history`, dữ liệu real-time mẫu vào MinIO `raw` và Kafka
+#   job-history   batch_history -> batch_aggregate -> export_ml_dataset   (chạy một lần rồi thoát, exit 0)
+#   job-stream    stream_measurements: đọc Kafka liên tục, ghi Cassandra
+#   job-aggregate cứ AGG_INTERVAL_SEC giây chạy lại batch_aggregate + export_ml_dataset (để có cả số real-time)
+#   grafana       dashboard (provisioning của A)
+name: aqi-demo
+
+x-spark-image: &spark-image apache/spark:3.5.6-scala2.12-java17-python3-ubuntu
+
+x-spark-job: &spark-job
+  image: *spark-image
+  user: root
+  networks: [aqi-net]
+  working_dir: /opt/processing
+  volumes:
+    - ./processing:/opt/processing
+    - spark_checkpoints:/checkpoints
+    - ivy_cache:/tmp/ivy
+  environment: &spark-job-env
+    SPARK_MASTER: ${SPARK_MASTER:-spark://spark-master:7077}
+    SPARK_PKG_VERSION: "3.5.6"
+    CASSANDRA_HOST: cassandra
+    MINIO_ENDPOINT: http://minio:9000
+    MINIO_ACCESS_KEY: ${MINIO_ROOT_USER:-minioadmin}
+    MINIO_SECRET_KEY: ${MINIO_ROOT_PASSWORD:-minioadmin123}
+    ALERT_THRESHOLD: ${ALERT_THRESHOLD:-150}
+    METRICS_FILE: /opt/processing/_runtime/metrics.jsonl
+  depends_on: &spark-job-deps
+    seed:
+      condition: service_completed_successfully
+    cassandra-init:
+      condition: service_completed_successfully
+    spark-worker:
+      condition: service_started
+
+networks:
+  aqi-net:
+    driver: bridge
+
+volumes:
+  minio_data:
+  cassandra_data:
+  grafana_data:
+  spark_checkpoints:
+  ivy_cache:
+
+services:
+  # ---------------------------------------------------------------- Kafka (KRaft, 1 node)
+  kafka:
+    image: apache/kafka:3.9.0
+    container_name: aqi-demo-kafka
+    restart: unless-stopped
+    ports:
+      - "9094:9094"   # cho producer/replay chạy trên máy host: KAFKA_BOOTSTRAP=localhost:9094
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093,EXTERNAL://:9094
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,EXTERNAL://localhost:9094
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
+    # Không gắn volume (giống ingestion/docker-compose.dev.yml): image chạy bằng user thường nên volume dễ lỗi quyền.
+    # Dữ liệu Kafka mất khi `down`; seed tự phát lại khi topic trống, và mọi thứ đã xử lý nằm ở Cassandra/MinIO.
+    networks: [aqi-net]
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --list"]
+      interval: 10s
+      timeout: 10s
+      retries: 20
+      start_period: 20s
+
+  kafka-init:
+    image: apache/kafka:3.9.0
+    container_name: aqi-demo-kafka-init
+    depends_on:
+      kafka:
+        condition: service_healthy
+    entrypoint: ["/bin/bash", "-c", "PATH=$$PATH:/opt/kafka/bin bash /scripts/create-topics.sh"]
+    volumes:
+      - ./infra/kafka/create-topics.sh:/scripts/create-topics.sh:ro
+    networks: [aqi-net]
+    restart: "no"
+
+  # ---------------------------------------------------------------- MinIO (data lake)
+  minio:
+    # Image chính thức minio/minio đã bị gỡ khỏi Docker Hub; dùng cùng bản build mà B dùng.
+    image: coollabsio/minio:RELEASE.2025-10-15T17-29-55Z
+    container_name: aqi-demo-minio
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minioadmin123}
+    volumes:
+      - minio_data:/data
+    networks: [aqi-net]
+
+  # ---------------------------------------------------------------- Cassandra
+  cassandra:
+    image: cassandra:4.1
+    container_name: aqi-demo-cassandra
+    restart: unless-stopped
+    ports:
+      - "9042:9042"
+    environment:
+      CASSANDRA_CLUSTER_NAME: aqi-cluster
+      CASSANDRA_DC: dc1
+      CASSANDRA_ENDPOINT_SNITCH: GossipingPropertyFileSnitch
+      HEAP_NEWSIZE: 128M
+      MAX_HEAP_SIZE: 1024M
+    volumes:
+      - cassandra_data:/var/lib/cassandra
+    networks: [aqi-net]
+    healthcheck:
+      test: ["CMD-SHELL", "cqlsh -e 'describe keyspaces'"]
+      interval: 15s
+      timeout: 10s
+      retries: 20
+      start_period: 40s
+
+  cassandra-init:
+    image: cassandra:4.1
+    container_name: aqi-demo-cassandra-init
+    depends_on:
+      cassandra:
+        condition: service_healthy
+    entrypoint: ["/bin/bash", "/scripts/init-schema.sh"]
+    volumes:
+      - ./infra/cassandra/init-schema.sh:/scripts/init-schema.sh:ro
+      - ./infra/cassandra/schema.cql:/scripts/schema.cql:ro
+    networks: [aqi-net]
+    restart: "no"
+
+  # ---------------------------------------------------------------- Spark standalone (1 master + 1 worker)
+  spark-master:
+    image: *spark-image
+    container_name: aqi-demo-spark-master
+    hostname: spark-master
+    user: root
+    restart: unless-stopped
+    command: ["/opt/spark/bin/spark-class", "org.apache.spark.deploy.master.Master",
+              "--host", "spark-master", "--port", "7077", "--webui-port", "8080"]
+    ports:
+      - "8080:8080"
+      - "7077:7077"
+    volumes:
+      - ./processing:/opt/processing
+      - spark_checkpoints:/checkpoints
+      - ivy_cache:/tmp/ivy
+    networks: [aqi-net]
+
+  spark-worker:
+    image: *spark-image
+    container_name: aqi-demo-spark-worker
+    hostname: spark-worker
+    user: root
+    restart: unless-stopped
+    depends_on: [spark-master]
+    command: ["/opt/spark/bin/spark-class", "org.apache.spark.deploy.worker.Worker",
+              "--cores", "${SPARK_WORKER_CORES:-2}", "--memory", "${SPARK_WORKER_MEMORY:-2g}",
+              "--webui-port", "8081", "spark://spark-master:7077"]
+    ports:
+      - "8081:8081"
+    volumes:
+      - ./processing:/opt/processing
+      - spark_checkpoints:/checkpoints
+    networks: [aqi-net]
+
+  # ---------------------------------------------------------------- Nạp dữ liệu
+  seed:
+    image: python:3.12-slim
+    container_name: aqi-demo-seed
+    depends_on:
+      minio:
+        condition: service_started
+      kafka-init:
+        condition: service_completed_successfully
+    environment:
+      MINIO_ENDPOINT: http://minio:9000
+      MINIO_ACCESS_KEY: ${MINIO_ROOT_USER:-minioadmin}
+      MINIO_SECRET_KEY: ${MINIO_ROOT_PASSWORD:-minioadmin123}
+      KAFKA_BOOTSTRAP: kafka:9092
+      HISTORY_DIR: /data/history      # = ./data/history trên máy (giải nén history-hn-hcm.zip vào đây)
+      RAW_DIR: /data/raw              # = ./data/raw (tùy chọn: dữ liệu real-time đầy đủ của B)
+      RAW_ZIPS: /repo/ingestion/results/raw-mau.zip
+      FORCE_REPLAY: ${FORCE_REPLAY:-0}
+      PIP_DISABLE_PIP_VERSION_CHECK: "1"
+    volumes:
+      - ./:/repo:ro
+      - ./data:/data:ro
+    command: ["sh", "-c", "pip install -q --root-user-action=ignore boto3 kafka-python && python /repo/processing/tools/seed_demo.py"]
+    networks: [aqi-net]
+    restart: "no"
+
+  # ---------------------------------------------------------------- Job Spark của phần C
+  job-history:
+    <<: *spark-job
+    container_name: aqi-demo-job-history
+    hostname: job-history
+    environment:
+      <<: *spark-job-env
+      SPARK_DRIVER_HOST: job-history
+    command:
+      - bash
+      - -c
+      - >-
+        bin/submit.sh batch/batch_history.py ${HISTORY_ARGS:-}
+        && bin/submit.sh batch/batch_aggregate.py
+        && bin/submit.sh batch/export_ml_dataset.py --out /opt/processing/_runtime/ml_dataset
+    restart: "no"
+
+  job-stream:
+    <<: *spark-job
+    container_name: aqi-demo-job-stream
+    hostname: job-stream
+    environment:
+      <<: *spark-job-env
+      SPARK_DRIVER_HOST: job-stream
+      SPARK_DRIVER_MEMORY: 768m
+    command: ["bin/submit.sh", "streaming/stream_measurements.py", "--trigger", "${STREAM_TRIGGER:-30 seconds}"]
+    restart: on-failure
+
+  job-aggregate:
+    <<: *spark-job
+    container_name: aqi-demo-job-aggregate
+    hostname: job-aggregate
+    environment:
+      <<: *spark-job-env
+      SPARK_DRIVER_HOST: job-aggregate
+      AGG_INTERVAL_SEC: ${AGG_INTERVAL_SEC:-900}
+    depends_on:
+      <<: *spark-job-deps
+      job-history:
+        condition: service_completed_successfully
+    command:
+      - bash
+      - -c
+      - >-
+        while true; do
+        sleep $${AGG_INTERVAL_SEC:-900};
+        bin/submit.sh batch/batch_aggregate.py
+        && bin/submit.sh batch/export_ml_dataset.py --out /opt/processing/_runtime/ml_dataset;
+        done
+    restart: unless-stopped
+
+  # ---------------------------------------------------------------- Grafana
+  grafana:
+    image: grafana/grafana:10.4.2
+    container_name: aqi-demo-grafana
+    restart: unless-stopped
+    depends_on:
+      cassandra:
+        condition: service_healthy
+    ports:
+      - "3000:3000"
+    environment:
+      GF_INSTALL_PLUGINS: hadesarchitect-cassandra-datasource
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-admin}
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./infra/grafana/provisioning:/etc/grafana/provisioning
+      - ./infra/grafana/dashboards:/var/lib/grafana/dashboards
+    networks: [aqi-net]
