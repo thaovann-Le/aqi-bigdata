@@ -2,6 +2,7 @@ apiVersion: 1
 
 datasources:
   - name: Cassandra
+    uid: cassandra_aqi
     type: hadesarchitect-cassandra-datasource
     access: proxy
     isDefault: true

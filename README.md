@@ -91,6 +91,23 @@ docker compose logs -f cassandra-init
 `CREATE TABLE IF NOT EXISTS` không sửa bảng đã có: khi đổi khóa chính hoặc thêm cột, xóa keyspace cũ trước
 (`docker compose exec cassandra cqlsh -e "DROP KEYSPACE aqi"`), hoặc `docker compose down -v`.
 
+## Dashboard Grafana
+
+Dashboard "AQI Hà Nội & TP.HCM - Tổng quan" tự nạp khi Grafana khởi động (provisioning), gồm 7 panel:
+bản đồ vị trí trạm, AQI hiện tại mỗi thành phố (số lớn), bảng giá trị mới nhất 4 trạm AQICN Hà Nội, xu hướng
+AQI theo giờ so sánh 2 thành phố, bảng cảnh báo, và dự báo so với thực tế. File gốc:
+[`infra/grafana/dashboards/aqi-overview.json`](infra/grafana/dashboards/aqi-overview.json).
+
+Các panel dùng CQL cố định dạng `ORDER BY ts DESC LIMIT N` (không dùng macro thời gian của plugin Cassandra
+vì chưa xác minh được cú pháp macro trên phiên bản plugin cài qua `GF_INSTALL_PLUGINS`) — nghĩa là thanh chọn
+khung thời gian của Grafana **không** lọc lại các panel này; muốn xem khoảng dài/ngắn hơn thì sửa `LIMIT`
+trong từng target của panel (Edit panel → chọn target → sửa CQL).
+
+Nếu panel nào hiện "No data" hoặc lỗi query sau khi Grafana mở lên lần đầu: mở panel đó → Edit → kiểm tra ô
+CQL có hiển thị đúng không (field `query`/`target` trong JSON — tùy phiên bản plugin đọc field nào); nếu
+trống, dán lại câu CQL trong mô tả panel (icon (i) ở góc) vào ô query. Panel "Dự báo so với thực tế" sẽ trống
+cho tới khi `ml/serving` (vai D) chạy và ghi vào bảng `forecasts`.
+
 ## Quy ước làm việc
 
 - Mỗi vai (A/B/C/D) làm việc chủ yếu trong thư mục tương ứng (`infra/`, `ingestion/`,

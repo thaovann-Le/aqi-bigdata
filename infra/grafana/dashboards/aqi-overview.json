@@ -1,0 +1,363 @@
+{
+  "title": "AQI Hà Nội & TP.HCM - Tổng quan",
+  "uid": "aqi-overview",
+  "schemaVersion": 39,
+  "version": 1,
+  "editable": true,
+  "tags": ["aqi", "bigdata"],
+  "timezone": "Asia/Ho_Chi_Minh",
+  "time": { "from": "now-7d", "to": "now" },
+  "refresh": "5m",
+  "panels": [
+    {
+      "id": 1,
+      "type": "geomap",
+      "title": "Vị trí trạm quan trắc",
+      "description": "Vị trí tĩnh các trạm AQICN (Hà Nội) và tâm 2 thành phố (nguồn mô hình Open-Meteo luôn có dữ liệu). Giá trị AQI theo thời gian thực xem ở panel 'AQI hiện tại' và bảng trạm bên cạnh — plugin Cassandra không hỗ trợ join nên bản đồ này không tự tô màu theo AQI.",
+      "gridPos": { "x": 0, "y": 0, "w": 12, "h": 9 },
+      "datasource": { "type": "datasource", "uid": "grafana" },
+      "targets": [
+        { "refId": "A", "datasource": { "type": "datasource", "uid": "grafana" }, "queryType": "randomWalk", "hide": true }
+      ],
+      "options": {
+        "view": { "id": "fit" },
+        "controls": { "showZoom": true, "mouseWheelZoom": true, "showAttribution": true },
+        "basemap": { "type": "osm-standard", "name": "Bản đồ", "config": {} },
+        "layers": [
+          {
+            "type": "markers",
+            "name": "Trạm AQICN - Hà Nội",
+            "config": {
+              "style": {
+                "size": { "fixed": 8 },
+                "color": { "fixed": "#1f78c1" },
+                "symbol": { "fixed": "img/icons/marker/circle.svg" },
+                "textConfig": { "fontSize": 12, "offsetY": -10 }
+              },
+              "showLegend": true
+            },
+            "location": { "mode": "geojson" },
+            "data": {
+              "type": "FeatureCollection",
+              "features": [
+                { "type": "Feature", "geometry": { "type": "Point", "coordinates": [105.8831, 21.0491] }, "properties": { "name": "Hà Nội trạm 1583 (aqicn:1583)" } },
+                { "type": "Feature", "geometry": { "type": "Point", "coordinates": [105.8180306, 21.0811211] }, "properties": { "name": "UNIS Hà Nội (aqicn:8688)" } },
+                { "type": "Feature", "geometry": { "type": "Point", "coordinates": [105.80013, 21.01525] }, "properties": { "name": "Chi cục BVMT (aqicn:13026)" } },
+                { "type": "Feature", "geometry": { "type": "Point", "coordinates": [105.74187, 21.04975] }, "properties": { "name": "UBND P. Minh Khai (aqicn:13251)" } }
+              ]
+            }
+          },
+          {
+            "type": "markers",
+            "name": "Tâm thành phố (nguồn mô hình)",
+            "config": {
+              "style": {
+                "size": { "fixed": 14 },
+                "color": { "fixed": "#d62728" },
+                "symbol": { "fixed": "img/icons/marker/star.svg" },
+                "textConfig": { "fontSize": 13, "offsetY": -12 }
+              },
+              "showLegend": true
+            },
+            "location": { "mode": "geojson" },
+            "data": {
+              "type": "FeatureCollection",
+              "features": [
+                { "type": "Feature", "geometry": { "type": "Point", "coordinates": [105.8412, 21.0245] }, "properties": { "name": "Hà Nội (model:hanoi)" } },
+                { "type": "Feature", "geometry": { "type": "Point", "coordinates": [106.6296, 10.823] }, "properties": { "name": "TP.HCM (model:hcm)" } }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 2,
+      "type": "stat",
+      "title": "AQI hiện tại - Hà Nội",
+      "description": "Nguồn mô hình CAMS (Open-Meteo), luôn có dữ liệu. station_id = model:hanoi",
+      "gridPos": { "x": 12, "y": 0, "w": 6, "h": 4 },
+      "datasource": { "type": "hadesarchitect-cassandra-datasource", "uid": "cassandra_aqi" },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": { "type": "hadesarchitect-cassandra-datasource", "uid": "cassandra_aqi" },
+          "rawQuery": true,
+          "queryType": "query",
+          "query": "SELECT ts, aqi FROM aqi.measurements WHERE city = 'hanoi' AND station_id = 'model:hanoi' ORDER BY ts DESC LIMIT 1",
+          "target": "SELECT ts, aqi FROM aqi.measurements WHERE city = 'hanoi' AND station_id = 'model:hanoi' ORDER BY ts DESC LIMIT 1"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "value": null, "color": "green" },
+              { "value": 51, "color": "yellow" },
+              { "value": 101, "color": "orange" },
+              { "value": 151, "color": "red" },
+              { "value": 201, "color": "purple" },
+              { "value": 301, "color": "dark-red" }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "/aqi/" }
+      }
+    },
+    {
+      "id": 3,
+      "type": "stat",
+      "title": "AQI hiện tại - TP.HCM",
+      "description": "Nguồn mô hình CAMS (Open-Meteo), luôn có dữ liệu. station_id = model:hcm",
+      "gridPos": { "x": 18, "y": 0, "w": 6, "h": 4 },
+      "datasource": { "type": "hadesarchitect-cassandra-datasource", "uid": "cassandra_aqi" },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": { "type": "hadesarchitect-cassandra-datasource", "uid": "cassandra_aqi" },
+          "rawQuery": true,
+          "queryType": "query",
+          "query": "SELECT ts, aqi FROM aqi.measurements WHERE city = 'hcm' AND station_id = 'model:hcm' ORDER BY ts DESC LIMIT 1",
+          "target": "SELECT ts, aqi FROM aqi.measurements WHERE city = 'hcm' AND station_id = 'model:hcm' ORDER BY ts DESC LIMIT 1"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "value": null, "color": "green" },
+              { "value": 51, "color": "yellow" },
+              { "value": 101, "color": "orange" },
+              { "value": 151, "color": "red" },
+              { "value": 201, "color": "purple" },
+              { "value": 301, "color": "dark-red" }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "/aqi/" }
+      }
+    },
+    {
+      "id": 4,
+      "type": "table",
+      "title": "Trạm AQICN (Hà Nội) - giá trị mới nhất",
+      "description": "Mỗi target ứng với 1 trạm AQICN cố định (xem ingestion/stations.json). Trạm OpenAQ không đưa vào đây vì danh sách trạm đang hoạt động thay đổi theo thời gian (xem producer.py).",
+      "gridPos": { "x": 12, "y": 4, "w": 12, "h": 5 },
+      "datasource": { "type": "hadesarchitect-cassandra-datasource", "uid": "cassandra_aqi" },
+      "transformations": [{ "id": "merge", "options": {} }],
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": { "type": "hadesarchitect-cassandra-datasource", "uid": "cassandra_aqi" },
+          "rawQuery": true,
+          "queryType": "query",
+          "query": "SELECT station_id, ts, aqi, pm25 FROM aqi.measurements WHERE city = 'hanoi' AND station_id = 'aqicn:1583' ORDER BY ts DESC LIMIT 1",
+          "target": "SELECT station_id, ts, aqi, pm25 FROM aqi.measurements WHERE city = 'hanoi' AND station_id = 'aqicn:1583' ORDER BY ts DESC LIMIT 1"
+        },
+        {
+          "refId": "B",
+          "datasource": { "type": "hadesarchitect-cassandra-datasource", "uid": "cassandra_aqi" },
+          "rawQuery": true,
+          "queryType": "query",
+          "query": "SELECT station_id, ts, aqi, pm25 FROM aqi.measurements WHERE city = 'hanoi' AND station_id = 'aqicn:8688' ORDER BY ts DESC LIMIT 1",
+          "target": "SELECT station_id, ts, aqi, pm25 FROM aqi.measurements WHERE city = 'hanoi' AND station_id = 'aqicn:8688' ORDER BY ts DESC LIMIT 1"
+        },
+        {
+          "refId": "C",
+          "datasource": { "type": "hadesarchitect-cassandra-datasource", "uid": "cassandra_aqi" },
+          "rawQuery": true,
+          "queryType": "query",
+          "query": "SELECT station_id, ts, aqi, pm25 FROM aqi.measurements WHERE city = 'hanoi' AND station_id = 'aqicn:13026' ORDER BY ts DESC LIMIT 1",
+          "target": "SELECT station_id, ts, aqi, pm25 FROM aqi.measurements WHERE city = 'hanoi' AND station_id = 'aqicn:13026' ORDER BY ts DESC LIMIT 1"
+        },
+        {
+          "refId": "D",
+          "datasource": { "type": "hadesarchitect-cassandra-datasource", "uid": "cassandra_aqi" },
+          "rawQuery": true,
+          "queryType": "query",
+          "query": "SELECT station_id, ts, aqi, pm25 FROM aqi.measurements WHERE city = 'hanoi' AND station_id = 'aqicn:13251' ORDER BY ts DESC LIMIT 1",
+          "target": "SELECT station_id, ts, aqi, pm25 FROM aqi.measurements WHERE city = 'hanoi' AND station_id = 'aqicn:13251' ORDER BY ts DESC LIMIT 1"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": { "custom": { "align": "auto" } },
+        "overrides": [
+          {
+            "matcher": { "id": "byName", "options": "aqi" },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": { "type": "color-background" }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    { "value": null, "color": "green" },
+                    { "value": 51, "color": "yellow" },
+                    { "value": 101, "color": "orange" },
+                    { "value": 151, "color": "red" },
+                    { "value": 201, "color": "purple" },
+                    { "value": 301, "color": "dark-red" }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "options": {}
+    },
+    {
+      "id": 5,
+      "type": "timeseries",
+      "title": "Xu hướng AQI theo giờ - so sánh Hà Nội / TP.HCM",
+      "description": "daily_agg, period_type='hour', data_basis='model' (chuỗi mô hình CAMS, liên tục, không có khoảng trống). 168 giờ gần nhất (~7 ngày).",
+      "gridPos": { "x": 0, "y": 9, "w": 24, "h": 8 },
+      "datasource": { "type": "hadesarchitect-cassandra-datasource", "uid": "cassandra_aqi" },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": { "type": "hadesarchitect-cassandra-datasource", "uid": "cassandra_aqi" },
+          "rawQuery": true,
+          "queryType": "query",
+          "alias": "Hà Nội",
+          "query": "SELECT period_start, avg_aqi FROM aqi.daily_agg WHERE city = 'hanoi' AND period_type = 'hour' AND data_basis = 'model' ORDER BY period_start DESC LIMIT 168",
+          "target": "SELECT period_start, avg_aqi FROM aqi.daily_agg WHERE city = 'hanoi' AND period_type = 'hour' AND data_basis = 'model' ORDER BY period_start DESC LIMIT 168"
+        },
+        {
+          "refId": "B",
+          "datasource": { "type": "hadesarchitect-cassandra-datasource", "uid": "cassandra_aqi" },
+          "rawQuery": true,
+          "queryType": "query",
+          "alias": "TP.HCM",
+          "query": "SELECT period_start, avg_aqi FROM aqi.daily_agg WHERE city = 'hcm' AND period_type = 'hour' AND data_basis = 'model' ORDER BY period_start DESC LIMIT 168",
+          "target": "SELECT period_start, avg_aqi FROM aqi.daily_agg WHERE city = 'hcm' AND period_type = 'hour' AND data_basis = 'model' ORDER BY period_start DESC LIMIT 168"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": { "unit": "none", "custom": { "drawStyle": "line", "lineWidth": 2, "spanNulls": true } },
+        "overrides": []
+      },
+      "options": { "legend": { "displayMode": "list", "placement": "bottom" }, "tooltip": { "mode": "multi" } }
+    },
+    {
+      "id": 6,
+      "type": "table",
+      "title": "Cảnh báo (alerts) - 50 gần nhất mỗi thành phố",
+      "description": "alerts: sinh khi AQI của trạm đo (không tính số mô hình) > 150 (US AQI, mức Unhealthy).",
+      "gridPos": { "x": 0, "y": 17, "w": 12, "h": 8 },
+      "datasource": { "type": "hadesarchitect-cassandra-datasource", "uid": "cassandra_aqi" },
+      "transformations": [{ "id": "merge", "options": {} }],
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": { "type": "hadesarchitect-cassandra-datasource", "uid": "cassandra_aqi" },
+          "rawQuery": true,
+          "queryType": "query",
+          "query": "SELECT city, ts, station_id, aqi, level, message FROM aqi.alerts WHERE city = 'hanoi' ORDER BY ts DESC LIMIT 50",
+          "target": "SELECT city, ts, station_id, aqi, level, message FROM aqi.alerts WHERE city = 'hanoi' ORDER BY ts DESC LIMIT 50"
+        },
+        {
+          "refId": "B",
+          "datasource": { "type": "hadesarchitect-cassandra-datasource", "uid": "cassandra_aqi" },
+          "rawQuery": true,
+          "queryType": "query",
+          "query": "SELECT city, ts, station_id, aqi, level, message FROM aqi.alerts WHERE city = 'hcm' ORDER BY ts DESC LIMIT 50",
+          "target": "SELECT city, ts, station_id, aqi, level, message FROM aqi.alerts WHERE city = 'hcm' ORDER BY ts DESC LIMIT 50"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": { "custom": { "align": "auto" } },
+        "overrides": [
+          {
+            "matcher": { "id": "byName", "options": "level" },
+            "properties": [
+              { "id": "custom.cellOptions", "value": { "type": "color-background" } },
+              {
+                "id": "mappings",
+                "value": [
+                  { "type": "value", "options": { "unhealthy": { "color": "red", "index": 0 } } },
+                  { "type": "value", "options": { "very_unhealthy": { "color": "purple", "index": 1 } } },
+                  { "type": "value", "options": { "hazardous": { "color": "dark-red", "index": 2 } } }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "options": {}
+    },
+    {
+      "id": 7,
+      "type": "timeseries",
+      "title": "Dự báo so với thực tế (AQI +24h)",
+      "description": "forecasts.predicted_aqi (D ghi hằng giờ, trống cho tới khi ml/serving chạy) vs daily_agg đo thực tế (data_basis='measured'). 48 giờ gần nhất.",
+      "gridPos": { "x": 12, "y": 17, "w": 12, "h": 8 },
+      "datasource": { "type": "hadesarchitect-cassandra-datasource", "uid": "cassandra_aqi" },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": { "type": "hadesarchitect-cassandra-datasource", "uid": "cassandra_aqi" },
+          "rawQuery": true,
+          "queryType": "query",
+          "alias": "Dự báo - Hà Nội",
+          "query": "SELECT forecast_for, predicted_aqi FROM aqi.forecasts WHERE city = 'hanoi' ORDER BY forecast_for DESC LIMIT 48",
+          "target": "SELECT forecast_for, predicted_aqi FROM aqi.forecasts WHERE city = 'hanoi' ORDER BY forecast_for DESC LIMIT 48"
+        },
+        {
+          "refId": "B",
+          "datasource": { "type": "hadesarchitect-cassandra-datasource", "uid": "cassandra_aqi" },
+          "rawQuery": true,
+          "queryType": "query",
+          "alias": "Thực tế - Hà Nội",
+          "query": "SELECT period_start, avg_aqi FROM aqi.daily_agg WHERE city = 'hanoi' AND period_type = 'hour' AND data_basis = 'measured' ORDER BY period_start DESC LIMIT 48",
+          "target": "SELECT period_start, avg_aqi FROM aqi.daily_agg WHERE city = 'hanoi' AND period_type = 'hour' AND data_basis = 'measured' ORDER BY period_start DESC LIMIT 48"
+        },
+        {
+          "refId": "C",
+          "datasource": { "type": "hadesarchitect-cassandra-datasource", "uid": "cassandra_aqi" },
+          "rawQuery": true,
+          "queryType": "query",
+          "alias": "Dự báo - TP.HCM",
+          "query": "SELECT forecast_for, predicted_aqi FROM aqi.forecasts WHERE city = 'hcm' ORDER BY forecast_for DESC LIMIT 48",
+          "target": "SELECT forecast_for, predicted_aqi FROM aqi.forecasts WHERE city = 'hcm' ORDER BY forecast_for DESC LIMIT 48"
+        },
+        {
+          "refId": "D",
+          "datasource": { "type": "hadesarchitect-cassandra-datasource", "uid": "cassandra_aqi" },
+          "rawQuery": true,
+          "queryType": "query",
+          "alias": "Thực tế - TP.HCM",
+          "query": "SELECT period_start, avg_aqi FROM aqi.daily_agg WHERE city = 'hcm' AND period_type = 'hour' AND data_basis = 'measured' ORDER BY period_start DESC LIMIT 48",
+          "target": "SELECT period_start, avg_aqi FROM aqi.daily_agg WHERE city = 'hcm' AND period_type = 'hour' AND data_basis = 'measured' ORDER BY period_start DESC LIMIT 48"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": { "unit": "none", "custom": { "drawStyle": "line", "lineWidth": 2, "spanNulls": true } },
+        "overrides": [
+          {
+            "matcher": { "id": "byRegexp", "options": "Dự báo.*" },
+            "properties": [{ "id": "custom.lineStyle", "value": { "fill": "dash", "dash": [10, 10] } }]
+          }
+        ]
+      },
+      "options": { "legend": { "displayMode": "list", "placement": "bottom" }, "tooltip": { "mode": "multi" } }
+    }
+  ]
+}
