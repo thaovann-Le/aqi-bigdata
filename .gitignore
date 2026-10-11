@@ -14,6 +14,10 @@ data/
 *.parquet
 *.csv
 !**/sample_*.csv
+!processing/reference/*.csv
+
+# Đầu ra khi chạy thử pipeline (metrics, bộ dữ liệu cho ML)
+processing/_runtime/
 
 # ML artifacts
 ml/training/*.model

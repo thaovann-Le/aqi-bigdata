@@ -1,24 +1,19 @@
 # processing/streaming (vai C)
 
-Spark Structured Streaming job: đọc Kafka (`aqi_raw`, `weather_raw`) → làm sạch → ghi Cassandra.
-
-## Việc cần làm
-
-- [ ] Đọc 2 topic Kafka (bootstrap server `kafka:9092` trong mạng `aqi-net`).
-- [ ] Loại bỏ bản ghi trùng/lỗi (thiếu trường bắt buộc, giá trị âm/vô lý).
-- [ ] Chuẩn hóa đơn vị: µg/m³ ↔ chỉ số AQI (chọn một thang: US AQI hoặc VN AQI — ghi rõ
-      lựa chọn này trong `docs/processing.md`, phải khớp với bảng `aqi_standard` trong schema).
-- [ ] Chuyển múi giờ về UTC+7.
-- [ ] Ghép (join) dữ liệu AQI với thời tiết theo giờ + thành phố.
-- [ ] Ghi kết quả vào bảng Cassandra `measurements` (schema: `infra/cassandra/schema.cql`).
-
-## Chạy job trên cụm Spark
+`stream_measurements.py`: Spark Structured Streaming đọc Kafka (`aqi_raw`, `weather_raw`) → làm sạch → Cassandra
+(`measurements`, `weather_hourly`, `alerts`). Mỗi micro-batch gọi `common/pipeline.process_raw`, đúng hàm mà
+`batch/batch_raw.py` và test dùng.
 
 ```bash
-docker compose exec spark-master spark-submit \
-  --master spark://spark-master:7077 \
-  --packages com.datastax.spark:spark-cassandra-connector_2.12:3.5.0,org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.0 \
-  /opt/processing/streaming/<ten_file>.py
+/opt/processing/bin/submit.sh streaming/stream_measurements.py              # liên tục, 30 giây một lô
+/opt/processing/bin/submit.sh streaming/stream_measurements.py --once       # xử lý hết dữ liệu hiện có rồi dừng
 ```
 
-(Thư mục `processing/` của repo được mount vào `/opt/processing` trong cả spark-master và spark-worker.)
+Chi tiết: [`processing/README.md`](../README.md).
+
+- [x] Đọc 2 topic Kafka (`kafka:9092`), lưu offset ở checkpoint `/checkpoints/measurements`.
+- [x] Bỏ message hỏng, bản ghi trùng, giá trị âm/vô lý, số đo OpenAQ cũ lẫn trong payload.
+- [x] Chuẩn hóa đơn vị (µg/m³, m/s) và thang AQI (US AQI).
+- [x] Giờ theo UTC+7, làm tròn xuống đầu giờ.
+- [x] Ghép thời tiết theo (thành phố, giờ), kể cả khi thời tiết đến ở lô trước (đọc lại từ `weather_hourly`).
+- [x] Ghi `measurements`, `weather_hourly`, `alerts`.

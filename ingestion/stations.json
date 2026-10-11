@@ -1,0 +1,34 @@
+[
+  {
+    "city": "hanoi",
+    "uid": 1583,
+    "feed": "@1583",
+    "name": "Hanoi, Vietnam (Hà Nội)",
+    "lat": 21.0491,
+    "lon": 105.8831
+  },
+  {
+    "city": "hanoi",
+    "uid": 8688,
+    "feed": "@8688",
+    "name": "United Nations International School of Hanoi, Vietnam (Trường Quốc tế Liên Hợp Quốc Hà Nội)",
+    "lat": 21.0811211,
+    "lon": 105.8180306
+  },
+  {
+    "city": "hanoi",
+    "uid": 13026,
+    "feed": "@13026",
+    "name": "Hà Nội/Chi cục BVMT, Vietnam",
+    "lat": 21.01525,
+    "lon": 105.80013
+  },
+  {
+    "city": "hanoi",
+    "uid": 13251,
+    "feed": "@13251",
+    "name": "Hà Nội/UBND P. Minh Khai, Bắc Từ Liêm, Vietnam",
+    "lat": 21.04975,
+    "lon": 105.74187
+  }
+]

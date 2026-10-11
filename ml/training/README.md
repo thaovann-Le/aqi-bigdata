@@ -1,5 +1,7 @@
 # ml/training (vai D)
 
+> **Dữ liệu đầu vào (từ C):** đọc [`docs/data_contract.md`](../../docs/data_contract.md) mục 3. Bộ dữ liệu phẳng theo thành phố-giờ: `processing/_runtime/ml_dataset/` (sinh bởi `docker-compose.demo.yml`), hàm đọc mẫu: [`processing/examples/ml_data_access.py`](../../processing/examples/ml_data_access.py).
+
 Huấn luyện mô hình XGBoost dự báo AQI 24 giờ tới, cho mỗi thành phố riêng.
 
 ## Việc cần làm
