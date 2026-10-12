@@ -2,19 +2,4 @@
 
 > **Dữ liệu đầu vào (từ C):** đọc [`docs/data_contract.md`](../../docs/data_contract.md) mục 3. Bộ dữ liệu phẳng theo thành phố-giờ: `processing/_runtime/ml_dataset/` (sinh bởi `docker-compose.demo.yml`), hàm đọc mẫu: [`processing/examples/ml_data_access.py`](../../processing/examples/ml_data_access.py).
 
-Huấn luyện mô hình XGBoost dự báo AQI 24 giờ tới, cho mỗi thành phố riêng.
-
-## Việc cần làm
-
-- [ ] Tạo đặc trưng (feature engineering): giờ, ngày trong tuần, tháng, thời tiết,
-      AQI của 1/3/6/24 giờ trước (lag features).
-- [ ] Huấn luyện XGBoost dự báo AQI +24h cho Hà Nội và TP.HCM (2 mô hình riêng, hoặc 1 mô hình
-      có đặc trưng `city`).
-- [ ] So sánh với mô hình cơ sở (baseline) "ngày mai giống hôm nay" (persistence model).
-- [ ] Đánh giá bằng MAE, RMSE trên tập test theo thời gian (time-based split, không shuffle ngẫu nhiên).
-- [ ] Lưu model đã huấn luyện (ví dụ `.json` của XGBoost) để `ml/serving` dùng lại.
-
-## Gợi ý thư viện
-
-`xgboost`, `pandas`, `scikit-learn` (metrics, time series split), `cassandra-driver` (đọc dữ liệu
-từ bảng `measurements`).
+Xem [ml/README.md](../README.md) để biết nội dung, cách chạy và các quyết định về dữ liệu/mô hình.

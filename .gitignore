@@ -11,6 +11,8 @@ venv/
 
 # Data (keep small samples in git, not full dumps)
 data/
+history-full/
+history-hn-hcm/
 *.parquet
 *.csv
 !**/sample_*.csv
@@ -19,13 +21,21 @@ data/
 # Đầu ra khi chạy thử pipeline (metrics, bộ dữ liệu cho ML)
 processing/_runtime/
 
-# ML artifacts
+# ML artifacts (regenerate with: bash ml/run_all.sh). Figures and small result
+# tables are kept in git because the report uses them.
 ml/training/*.model
 ml/training/*.pkl
 ml/training/mlruns/
+ml/outputs/models/
+ml/outputs/tables/*.log
+!ml/outputs/tables/*.csv
 
 # OS / editor
 .DS_Store
 Thumbs.db
 .vscode/
 .idea/
+
+# Test coverage reports
+.coverage
+htmlcov/

@@ -1,0 +1,17 @@
+# Lint settings for role D. Run from the repo root: python -m ruff check ml
+line-length = 120
+target-version = "py311"
+
+[lint]
+select = ["E", "F", "W", "I", "B", "UP"]
+ignore = [
+    "E501",  # long lines are tolerated in tables and messages
+    "B905",  # every zip() here pairs equal-length sequences (columns, labels, axes)
+]
+
+[lint.per-file-ignores]
+# These files must put ml/ on sys.path (or import `_setup`) BEFORE importing aqiml, so isort
+# ordering and E402 do not apply; reordering them would break the imports.
+"notebooks/*.py" = ["E402", "I001"]
+"training/*.py" = ["I001"]
+"serving/*.py" = ["I001"]
