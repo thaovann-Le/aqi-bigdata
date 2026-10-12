@@ -1,0 +1,64 @@
+city,aqi_mean,pm25_mean,pm25_p95,pct_hours_aqi_over_150,name,lat,lon,region,cell
+viettri,127.95,49.48,102.7,34.07,Việt Trì,21.32,105.4,Miền Bắc,47
+vinhyen,127.95,49.48,102.7,34.07,Vĩnh Yên,21.31,105.6,Miền Bắc,47
+hungyen,124.17,47.65,106.9,31.51,Hưng Yên,20.65,106.05,Miền Bắc,24
+hanoi,120.6,45.04,100.1,27.76,Hà Nội,21.02,105.84,Miền Bắc,0
+bacgiang,120.6,45.04,100.1,27.76,Bắc Giang,21.27,106.19,Miền Bắc,0
+bacninh,120.6,45.04,100.1,27.76,Bắc Ninh,21.19,106.08,Miền Bắc,0
+namdinh,114.15,41.67,91.0,22.5,Nam Định,20.43,106.18,Miền Bắc,29
+ninhbinh,114.15,41.67,91.0,22.5,Ninh Bình,20.26,105.98,Miền Bắc,29
+phuly,114.15,41.67,91.0,22.5,Phủ Lý,20.55,105.91,Miền Bắc,29
+haiduong,107.71,38.12,85.4,17.43,Hải Dương,20.94,106.33,Miền Bắc,18
+yenbai,101.85,35.55,79.6,14.36,Yên Bái,21.72,104.91,Miền Bắc,52
+thainguyen,102.24,34.84,77.8,14.65,Thái Nguyên,21.59,105.85,Miền Bắc,42
+thanhhoa,98.0,33.17,70.1,9.98,Thanh Hóa,19.8,105.77,Miền Bắc,43
+haiphong,94.93,32.15,76.4,11.45,Hải Phòng,20.86,106.68,Miền Bắc,19
+thaibinh,96.43,32.03,72.4,10.17,Thái Bình,20.45,106.34,Miền Bắc,41
+tuyenquang,95.44,31.92,69.2,9.52,Tuyên Quang,21.82,105.21,Miền Bắc,45
+vinh,93.0,30.34,63.1,7.37,Vinh,18.67,105.69,Miền Trung - Tây Nguyên,48
+hoabinh,89.92,29.45,68.2,8.31,Hòa Bình,20.82,105.34,Miền Bắc,22
+backan,85.88,27.01,62.2,6.55,Bắc Kạn,22.15,105.83,Miền Bắc,1
+thudaumot,83.7,26.11,53.2,1.71,Thủ Dầu Một,10.98,106.65,Miền Nam,4
+bienhoa,83.7,26.11,53.2,1.71,Biên Hòa,10.94,106.82,Miền Nam,4
+hcm,83.7,26.11,53.2,1.71,Thành phố Hồ Chí Minh,10.82,106.63,Miền Nam,4
+halong,84.74,25.21,56.6,6.51,Hạ Long,20.95,107.07,Miền Bắc,20
+caolanh,78.4,23.87,60.8,5.24,Cao Lãnh,10.46,105.63,Miền Nam,9
+longxuyen,78.4,23.87,60.8,5.24,Long Xuyên,10.39,105.44,Miền Nam,9
+langson,79.89,23.63,51.0,3.43,Lạng Sơn,21.85,106.76,Miền Bắc,27
+vinhlong,76.64,22.57,52.5,3.0,Vĩnh Long,10.25,105.97,Miền Nam,49
+hatinh,77.07,22.41,47.3,1.98,Hà Tĩnh,18.34,105.91,Miền Trung - Tây Nguyên,21
+mytho,75.94,21.98,49.37,1.98,Mỹ Tho,10.36,106.36,Miền Nam,3
+tanan,75.94,21.98,49.37,1.98,Tân An,10.54,106.41,Miền Nam,3
+bentre,75.94,21.98,49.37,1.98,Bến Tre,10.24,106.38,Miền Nam,3
+caobang,74.71,21.76,49.78,2.73,Cao Bằng,22.67,106.26,Miền Bắc,8
+cantho,73.6,21.41,53.0,4.09,Cần Thơ,10.04,105.79,Miền Nam,7
+tamky,78.61,20.86,41.1,3.75,Tam Kỳ,15.57,108.47,Miền Trung - Tây Nguyên,39
+laocai,71.0,20.2,51.6,2.98,Lào Cai,22.49,103.97,Miền Bắc,28
+hue,72.9,19.6,39.5,1.97,Huế,16.46,107.6,Miền Trung - Tây Nguyên,23
+danang,86.31,19.31,37.0,10.76,Đà Nẵng,16.07,108.22,Miền Trung - Tây Nguyên,11
+tayninh,69.57,19.28,45.6,0.57,Tây Ninh,11.31,106.1,Miền Nam,40
+hagiang,69.53,19.13,48.0,2.5,Hà Giang,22.82,104.98,Miền Bắc,17
+sonla,68.06,18.86,48.5,2.61,Sơn La,21.33,103.92,Miền Bắc,38
+rachgia,67.81,18.63,44.0,1.28,Rạch Giá,10.01,105.08,Miền Nam,36
+donghoi,70.3,17.72,37.7,1.85,Đồng Hới,17.47,106.62,Miền Trung - Tây Nguyên,14
+travinh,66.52,17.61,41.0,1.16,Trà Vinh,9.95,106.34,Miền Nam,44
+quangngai,69.85,17.31,32.8,1.74,Quảng Ngãi,15.12,108.79,Miền Trung - Tây Nguyên,34
+dienbienphu,62.36,17.18,50.9,3.41,Điện Biên Phủ,21.39,103.02,Miền Bắc,12
+dongha,66.13,17.16,36.9,0.91,Đông Hà,16.82,107.1,Miền Trung - Tây Nguyên,13
+soctrang,64.32,16.92,39.8,1.46,Sóc Trăng,9.6,105.97,Miền Nam,37
+vithanh,64.26,16.88,40.6,1.03,Vị Thanh,9.78,105.47,Miền Nam,50
+dongxoai,63.28,16.28,33.8,0.13,Đồng Xoài,11.54,106.88,Miền Trung - Tây Nguyên,15
+laichau,61.83,16.24,43.28,1.38,Lai Châu,22.4,103.46,Miền Bắc,26
+vungtau,60.72,13.69,26.1,1.17,Vũng Tàu,10.35,107.08,Miền Nam,51
+phanthiet,58.46,13.44,24.4,0.23,Phan Thiết,10.93,108.1,Miền Nam,32
+tuyhoa,58.78,13.43,25.7,0.29,Tuy Hòa,13.1,109.32,Miền Trung - Tây Nguyên,46
+nhatrang,59.04,13.33,24.9,0.17,Nha Trang,12.25,109.19,Miền Trung - Tây Nguyên,30
+quynhon,57.11,12.85,25.0,0.21,Quy Nhơn,13.78,109.22,Miền Trung - Tây Nguyên,35
+baclieu,55.85,12.63,23.7,0.0,Bạc Liêu,9.29,105.73,Miền Nam,2
+buonmathuot,54.04,12.25,28.3,0.21,Buôn Ma Thuột,12.67,108.04,Miền Trung - Tây Nguyên,5
+camau,53.93,12.06,25.3,0.0,Cà Mau,9.18,105.15,Miền Nam,6
+gianghia,50.91,11.3,27.2,0.0,Gia Nghĩa,12.0,107.69,Miền Trung - Tây Nguyên,16
+phanrang,49.99,10.27,19.2,0.0,Phan Rang-Tháp Chàm,11.56,108.99,Miền Trung - Tây Nguyên,31
+pleiku,49.0,10.23,26.7,0.11,Pleiku,13.98,108.0,Miền Trung - Tây Nguyên,33
+kontum,46.76,9.63,26.7,0.11,Kon Tum,14.35,108.01,Miền Trung - Tây Nguyên,25
+dalat,44.52,8.84,21.0,0.0,Đà Lạt,11.94,108.46,Miền Trung - Tây Nguyên,10

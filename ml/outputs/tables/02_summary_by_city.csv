@@ -1,0 +1,3 @@
+city,start,end,hours,aqi_mean,aqi_median,aqi_p95,pct_hours_over_alert,days,pct_days_over_alert
+hanoi,2024-01-02 14:00:00,2026-10-07 13:00:00,23585,98.5,90.8,172.2,11.5,1002,8.8
+hcm,2024-11-19 18:00:00,2026-10-07 13:00:00,15052,94.4,89.0,155.0,7.4,643,1.2

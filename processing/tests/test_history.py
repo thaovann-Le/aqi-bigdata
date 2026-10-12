@@ -113,3 +113,10 @@ def test_alerts_only_measured_above_threshold(built):
 def test_idempotent_no_duplicate_keys(built):
     m = built["meas"]
     assert m.count() == m.select("city", "station_id", "ts").distinct().count()
+
+
+def test_all_points_when_cities_is_none(spark, sample_history):
+    weather = sources.history_weather(spark, sample_history, None)
+    model = sources.history_model_aq(spark, sample_history, None)
+    assert "haiphong" in {r["city"] for r in weather.select("city").distinct().collect()}
+    assert "model:haiphong" in {r["station_id"] for r in model.select("station_id").distinct().collect()}

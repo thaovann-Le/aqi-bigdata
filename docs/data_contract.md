@@ -8,7 +8,7 @@ Cách chạy pipeline để có dữ liệu: [`processing/README.md`](../process
 
 | Quy ước | Giá trị |
 |---|---|
-| Thành phố (`city`) | `hanoi`, `hcm` |
+| Thành phố (`city`) | `hanoi`, `hcm` có số đo trạm + số mô hình + thời tiết. 61 tỉnh/thành còn lại (mã điểm trong `ingestion/points_vn.json`, ví dụ `haiphong`, `danang`) **chỉ có số mô hình CAMS (`is_model = true`) và thời tiết**, dùng để tăng dung lượng và so sánh; phân tích chính, dashboard và mô hình chỉ dùng `hanoi`, `hcm`. |
 | Thời gian | Cột `timestamp` là thời điểm tuyệt đối (Cassandra lưu UTC). Mọi giờ/ngày/tháng/mùa được cắt theo **giờ Việt Nam (UTC+7)**. `cqlsh` hiển thị theo UTC, hãy cộng 7 giờ khi đọc bằng mắt. |
 | Mốc giờ | `ts` = **đầu giờ** của thời điểm đo (10:37 → 10:00) |
 | Thang AQI | **US AQI** (EPA, bảng điểm gãy PM2.5 bản 05/2024). Cột `aqi_standard` luôn là `US_AQI`. |

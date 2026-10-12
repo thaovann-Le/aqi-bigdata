@@ -203,7 +203,9 @@ services:
       MINIO_ACCESS_KEY: ${MINIO_ROOT_USER:-minioadmin}
       MINIO_SECRET_KEY: ${MINIO_ROOT_PASSWORD:-minioadmin123}
       KAFKA_BOOTSTRAP: kafka:9092
-      HISTORY_DIR: /data/history      # = ./data/history trên máy (giải nén history-hn-hcm.zip vào đây)
+      # = ./data/history trên máy (giải nén history-full.zip hoặc history-hn-hcm.zip vào đây).
+      # Dữ liệu ở chỗ khác trong ./data thì đặt trong .env, ví dụ HISTORY_DIR=/data/history-full/history
+      HISTORY_DIR: ${HISTORY_DIR:-/data/history}
       RAW_DIR: /data/raw              # = ./data/raw (tùy chọn: dữ liệu real-time đầy đủ của B)
       RAW_ZIPS: /repo/ingestion/results/raw-mau.zip
       FORCE_REPLAY: ${FORCE_REPLAY:-0}
