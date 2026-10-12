@@ -41,14 +41,19 @@ def _explode_hourly(df: DataFrame, variables) -> DataFrame:
     return exploded.select("city", *[F.col(f"h.{c}").alias(c) for c in ["time"] + variables])
 
 
+def _only_cities(col, cities):
+    """Điều kiện lọc theo thành phố; cities = None nghĩa là lấy mọi điểm có trong dữ liệu (63 tỉnh/thành)."""
+    return F.lit(True) if cities is None else col.isin(*cities)
+
+
 def history_weather(spark: SparkSession, base: str, cities, years: str = "*") -> DataFrame:
-    """`years` là glob Hadoop, ví dụ "*" hoặc "{2024,2025}".
+    """`years` là glob Hadoop, ví dụ "*" hoặc "{2024,2025}". `cities` = None: mọi điểm.
 
     Thời tiết theo giờ -> (city, ts, temperature, humidity, wind_speed m/s, wind_direction, precipitation, pressure).
     """
     path = f"{base}/openmeteo/weather/point=*/year={years}.json"
     raw = spark.read.schema(_openmeteo_schema(WEATHER_VARS)).option("multiLine", True).json(path)
-    df = _explode_hourly(raw.where(F.col("point_id").isin(*cities)), WEATHER_VARS)
+    df = _explode_hourly(raw.where(_only_cities(F.col("point_id"), cities)), WEATHER_VARS)
     df = df.select(
         "city",
         F.date_trunc("hour", F.to_timestamp("time")).alias("ts"),
@@ -66,7 +71,7 @@ def history_model_aq(spark: SparkSession, base: str, cities, years: str = "*") -
     """Số mô hình CAMS của Open-Meteo (không phải số đo) -> định dạng measurements, is_model = true."""
     path = f"{base}/openmeteo/air_quality/point=*/year={years}.json"
     raw = spark.read.schema(_openmeteo_schema(AQ_VARS)).option("multiLine", True).json(path)
-    df = _explode_hourly(raw.where(F.col("point_id").isin(*cities)), AQ_VARS)
+    df = _explode_hourly(raw.where(_only_cities(F.col("point_id"), cities)), AQ_VARS)
     df = df.withColumn("ts", F.date_trunc("hour", F.to_timestamp("time"))).dropDuplicates(["city", "ts"])
     return _model_rows(df, pm25="pm2_5", pm10="pm10", no2="nitrogen_dioxide", so2="sulphur_dioxide",
                        o3="ozone", co="carbon_monoxide", aqi="us_aqi")
@@ -116,7 +121,7 @@ def hourly_wide(obs: DataFrame) -> DataFrame:
 def history_openaq(spark: SparkSession, base: str, stations: DataFrame, cities, years: str = "*") -> DataFrame:
     path = f"{base}/openaq/locationid=*/year={years}/*.csv.gz"
     raw = spark.read.option("header", True).schema(OPENAQ_SCHEMA).csv(path)
-    st = (stations.where((F.col("source") == "openaq") & F.col("city").isin(*cities))
+    st = (stations.where((F.col("source") == "openaq") & _only_cities(F.col("city"), cities))
                   .select("station_id", "city"))
     obs = (raw.where(F.col("parameter").isin(*config.POLLUTANTS) & is_mass_conc(F.col("units")))
               .withColumn("station_id", F.concat(F.lit("openaq:"), F.col("location_id").cast("string")))

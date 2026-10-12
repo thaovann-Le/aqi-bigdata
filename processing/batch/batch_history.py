@@ -3,7 +3,8 @@
 Chạy lại được (idempotent): ghi theo khóa chính nên chạy lại chỉ ghi đè cùng giá trị.
 Chạy xong thì chạy tiếp batch_aggregate.py để sinh daily_agg.
 
-  spark-submit batch_history.py                                   # hanoi + hcm, mọi năm, ghi Cassandra
+  spark-submit batch_history.py                                   # mọi điểm (63 tỉnh/thành), mọi năm, ghi Cassandra
+  spark-submit batch_history.py --cities hanoi,hcm                # chỉ hai thành phố
   spark-submit batch_history.py --years 2024,2025 --sink parquet:/tmp/out
 """
 import argparse
@@ -28,14 +29,16 @@ def years_glob(years: str) -> str:
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--base", default="s3a://history", help="thư mục gốc dữ liệu lịch sử (s3a://history hoặc đường dẫn cục bộ)")
-    ap.add_argument("--cities", default=",".join(config.CITIES))
+    # Mặc định "all": 61 tỉnh còn lại chỉ có số mô hình CAMS + thời tiết (is_model = true), dùng để tăng
+    # dung lượng và so sánh; phân tích, dashboard, mô hình vẫn chỉ dùng hanoi/hcm (config.CITIES).
+    ap.add_argument("--cities", default="all", help="'all' (mọi điểm có trong dữ liệu) hoặc danh sách, ví dụ hanoi,hcm")
     ap.add_argument("--years", default="", help="ví dụ 2024,2025 (mặc định: tất cả)")
     ap.add_argument("--sink", default="cassandra", help="cassandra | console | parquet:<thư mục>")
     ap.add_argument("--no-model", action="store_true", help="bỏ số mô hình Open-Meteo (chỉ số đo trạm)")
     ap.add_argument("--master", default=None)
     a = ap.parse_args()
 
-    cities = [c.strip() for c in a.cities.split(",")]
+    cities = None if a.cities.strip() == "all" else [c.strip() for c in a.cities.split(",")]
     spark = io.build_spark("batch_history", a.master)
     write = io.make_sink(a.sink)
     stations = io.load_stations(spark)
@@ -60,7 +63,7 @@ def main():
     elapsed = time.time() - t0
 
     append_metrics("batch_history", {
-        "cities": cities, "years": a.years or "all", "weather_rows": n_weather, "measurement_rows": n_meas,
+        "cities": cities or "all", "years": a.years or "all", "weather_rows": n_weather, "measurement_rows": n_meas,
         "of_which_model": n_model, "alert_rows": n_alerts, "seconds_read_and_transform": round(t_read, 1),
         "seconds_total": round(elapsed, 1), "rows_per_min": round(n_meas / elapsed * 60) if elapsed else None,
     })
