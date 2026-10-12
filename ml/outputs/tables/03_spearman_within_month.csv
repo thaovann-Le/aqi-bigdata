@@ -1,0 +1,11 @@
+city,variable,spearman_within_month
+hanoi,temperature,0.211
+hanoi,humidity,-0.131
+hanoi,precipitation,-0.352
+hanoi,wind_speed,-0.461
+hanoi,pressure,-0.075
+hcm,temperature,-0.014
+hcm,humidity,-0.011
+hcm,precipitation,-0.001
+hcm,wind_speed,-0.385
+hcm,pressure,-0.006

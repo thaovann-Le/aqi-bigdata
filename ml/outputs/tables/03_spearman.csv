@@ -1,0 +1,11 @@
+city,variable,spearman_hourly,spearman_daily
+hanoi,temperature,-0.342,-0.394
+hanoi,humidity,-0.1,-0.36
+hanoi,precipitation,-0.332,-0.559
+hanoi,wind_speed,-0.236,-0.293
+hanoi,pressure,0.389,0.443
+hcm,temperature,0.029,-0.098
+hcm,humidity,-0.1,-0.166
+hcm,precipitation,-0.145,-0.25
+hcm,wind_speed,-0.298,-0.509
+hcm,pressure,0.238,0.319
