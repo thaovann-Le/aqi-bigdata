@@ -3,18 +3,30 @@ nguồn	số file	MB	số bản ghi
 history/openaq	81	13.17	2116508
 history/openmeteo/air_quality	252	112.95	1883952
 history/openmeteo/weather	315	145.96	2760912
-raw/aqi_raw	78	1.21	954
-raw/weather_raw	78	0.12	162
-TỔNG	804	273.40	6762488
+raw/aqi_raw	821	12.84	9903
+raw/weather_raw	821	1.23	1652
+TỔNG	2290	286.14	6772927
 
 == Variety: số file theo định dạng ==
+jsonl	1642
 json	567
-jsonl	156
 csv.gz	81
 
 == Velocity: bản ghi real-time theo ngày ==
 ngày	topic	số bản ghi	bản ghi/giờ (chia 24)
 date=2026-10-06	aqi_raw	42	1.8
 date=2026-10-06	weather_raw	10	0.4
-date=2026-10-07	aqi_raw	912	38.0
-date=2026-10-07	weather_raw	152	6.3
+date=2026-10-07	aqi_raw	1548	64.5
+date=2026-10-07	weather_raw	258	10.8
+date=2026-10-08	aqi_raw	1460	60.8
+date=2026-10-08	weather_raw	242	10.1
+date=2026-10-09	aqi_raw	1694	70.6
+date=2026-10-09	weather_raw	282	11.8
+date=2026-10-10	aqi_raw	1728	72.0
+date=2026-10-10	weather_raw	288	12.0
+date=2026-10-11	aqi_raw	1728	72.0
+date=2026-10-11	weather_raw	288	12.0
+date=2026-10-12	aqi_raw	1656	69.0
+date=2026-10-12	weather_raw	276	11.5
+date=2026-10-13	aqi_raw	47	2.0
+date=2026-10-13	weather_raw	8	0.3
