@@ -6,10 +6,11 @@ Hướng dẫn cho A, C và D: có những dữ liệu gì, lấy về thế nà
 
 | Dữ liệu | Phạm vi | Kích thước | Lấy ở đâu |
 |---|---|---|---|
-| Lịch sử Hà Nội + TP.HCM | OpenAQ 2021–10/2026, Open-Meteo 2021–2025 | `history-hn-hcm.zip`, 14 MB | `https://drive.google.com/drive/folders/1Kzx6eRA8f35CqqGOqyvIHf3XnYnKDzDl?usp=sharing` |
-| Lịch sử đầy đủ | Như trên, thêm Open-Meteo của 61 tỉnh/thành khác | `history-full.zip`, 61 MB (giải nén 261 MB) | `https://drive.google.com/drive/folders/1Kzx6eRA8f35CqqGOqyvIHf3XnYnKDzDl?usp=sharing` |
+| Lịch sử Hà Nội + TP.HCM | OpenAQ 2021–10/2026, Open-Meteo 2021–2025 | `history-hn-hcm.zip`, 14 MB | `<DÁN LINK>` |
+| Lịch sử đầy đủ | Như trên, thêm Open-Meteo của 61 tỉnh/thành khác | `history-full.zip`, 61 MB (giải nén 261 MB) | `<DÁN LINK>` |
 | Mẫu real-time | Khoảng 14 giờ đầu, 1.116 message | `results/raw-mau.zip`, 264 KB | Có sẵn trong repo |
-| Real-time đầy đủ | 5 ngày, từ 23:35 ngày 06/10/2026 | `raw-full.zip` | Sẽ gửi sau 11/10 |
+| Real-time đầy đủ | Từ 23:35 ngày 06/10 đến 06:55 ngày 13/10/2026; 819 chu kỳ, 11.555 message | `results/raw-full.zip`, 2,8 MB (giải nén 14 MB) | Có sẵn trong repo |
+| Dữ liệu tải bù | Số liệu theo giờ 06–13/10 để lấp các khoảng gián đoạn của real-time (mục 7) | `results/backfill.zip` | Có sẵn trong repo |
 | Số liệu 3V | Dung lượng, số bản ghi, tốc độ | `results/stats_3v.txt` | Có sẵn trong repo |
 | Danh sách trạm | AQICN, OpenAQ, 63 điểm Open-Meteo | `stations.json`, `openaq_locations.json`, `points_vn.json` | Có sẵn trong repo |
 
@@ -196,10 +197,32 @@ Producer chạy từ khoảng 23:35 ngày 06/10/2026, chu kỳ 10 phút, 14 mess
 
 | Khoảng gián đoạn | Nguyên nhân |
 |---|---|
-| 07/10, 07:51–08:54 | Gập máy |
-| 07/10, 17:27–khoảng 19:24 | Máy sập, khởi động lại |
+| 07/10, 07:50–08:57 | Gập máy |
+| 07/10, 17:27–19:24 | Máy sập, khởi động lại |
+| 08/10, 08:14–08:53 | Máy ngủ |
+| 08/10, 17:33–21:20 | Máy ngủ |
+| 09/10, 08:10–08:47 | Gập máy |
+| 09/10, 17:33–18:23 | Máy ngủ |
+| 12/10, 08:16–08:55 | Máy ngủ |
+| 12/10, 09:45–10:02 | Máy ngủ |
+| 12/10, 17:32–18:28 | Máy ngủ |
+| 13/10, 00:17–06:55 | Máy ngủ qua đêm |
 
-Có một lô 14 message bị ghi trùng lúc 08:01 ngày 07/10. Bảng này sẽ được cập nhật khi gửi `raw-full.zip`.
+Số chu kỳ mỗi ngày (đủ là 144): 07/10: 128, 08/10: 121, 09/10: 138, 10/10: 144, 11/10: 144, 12/10: 136. Tính đến 00:17 ngày 13/10, tổng thời gian gián đoạn là khoảng 10,8 giờ trên 144,7 giờ.
+
+Có lô message bị ghi trùng sau các lần máy ngủ dậy (ví dụ 14 message lúc 08:01 ngày 07/10); bỏ trùng như hướng dẫn ở trên.
+
+**Dữ liệu tải bù.** `results/backfill.zip` chứa số liệu theo giờ của cả giai đoạn 06–13/10, lấy lại sau từ các nguồn, để có chuỗi liền mạch qua các khoảng gián đoạn:
+
+```text
+history/backfill/
+├── openaq/locationid=<mã>/location-<mã>-backfill.csv.gz        # 6 trạm đang theo dõi, trung bình theo giờ, cùng cột với OpenAQ lịch sử
+└── openmeteo/<weather|air_quality>/point=<hanoi|hcm>/backfill.json   # cùng dạng với Open-Meteo lịch sử
+```
+
+- Đây là dữ liệu tải lại, không phải message real-time; không tính vào số liệu Velocity.
+- AQICN không tải bù được, vì API chỉ trả số đo mới nhất.
+- Thời điểm trong file OpenAQ tải bù là lúc kết thúc của mỗi giờ. Trước khi ghép với dữ liệu real-time, hãy đối chiếu vài giá trị với message `openaq` cùng giờ để chắc không lệch một giờ.
 
 ## 8. Lưu ý theo từng người
 
