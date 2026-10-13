@@ -107,11 +107,3 @@ Nếu panel nào hiện "No data" hoặc lỗi query sau khi Grafana mở lên l
 CQL có hiển thị đúng không (field `query`/`target` trong JSON — tùy phiên bản plugin đọc field nào); nếu
 trống, dán lại câu CQL trong mô tả panel (icon (i) ở góc) vào ô query. Panel "Dự báo so với thực tế" sẽ trống
 cho tới khi `ml/serving` (vai D) chạy và ghi vào bảng `forecasts`.
-
-## Quy ước làm việc
-
-- Mỗi vai (A/B/C/D) làm việc chủ yếu trong thư mục tương ứng (`infra/`, `ingestion/`,
-  `processing/`, `ml/`) — xem phân công chi tiết trong `docs/PLAN.md`.
-- Commit nhỏ, thường xuyên; họp nhanh mỗi tối để đồng bộ.
-- Báo cáo từng chương nằm trong `docs/` (`architecture.md`, `data_3v.md`,
-  `processing.md`, `analysis_ml.md`), ghép lại thành báo cáo cuối cùng ở Ngày 6.
