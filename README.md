@@ -2,7 +2,9 @@
 
 Hệ thống thu thập, xử lý và dự báo chất lượng không khí theo thời gian thực cho
 Hà Nội và TP.HCM. Xem kế hoạch chi tiết (phân công, timeline, outcome) tại
-[`docs/PLAN.md`](docs/PLAN.md).
+[`docs/PLAN.md`](docs/PLAN.md). Project này đối chiếu và áp dụng các khái niệm của môn Tích hợp
+Dữ liệu Lớn (heterogeneity, schema alignment/GAV, record linkage, sources selection) — xem
+[`docs/data_integration_concepts.md`](docs/data_integration_concepts.md).
 
 ## Kiến trúc
 

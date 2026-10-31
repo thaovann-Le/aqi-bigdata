@@ -6,7 +6,8 @@ datasources:
     type: hadesarchitect-cassandra-datasource
     access: proxy
     isDefault: true
+    url: "cassandra:9042"
     jsonData:
-      host: "cassandra:9042"
       keyspace: aqi
+      consistency: "ONE"
     editable: true

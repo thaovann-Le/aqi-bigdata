@@ -30,6 +30,9 @@ ml/outputs/models/
 ml/outputs/tables/*.log
 !ml/outputs/tables/*.csv
 
+# Tài liệu bài giảng cá nhân (PDF bản quyền giảng viên, không đưa lên repo chung)
+/Slide/
+
 # OS / editor
 .DS_Store
 Thumbs.db
