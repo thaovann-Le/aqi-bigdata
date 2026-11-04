@@ -142,3 +142,4 @@ Khi B cập nhật `ingestion/stations.json` hoặc `ingestion/openaq_locations.
 | `measurements` có số nhưng `temperature` null ở vài giờ đầu | bình thường: thời tiết real-time bắt đầu muộn hơn số đo AQICN (dữ liệu trạm báo trễ) |
 | Không có cảnh báo nào | AQI chưa vượt 150; hạ `ALERT_THRESHOLD` khi demo |
 | Đổi code mà streaming không nhận | dừng `job-stream` và khởi động lại; đổi logic lớn thì xóa checkpoint (`down -v` hoặc đổi `--checkpoint`) |
+| Panel Grafana timeseries hiện hàng chục series trùng tên (mỗi điểm giờ 1 series) hoặc dữ liệu cũ/mới bị trộn lẫn khi hiển thị | lỗi phân trang của plugin `hadesarchitect-cassandra-datasource`: với query 2 cột (time + 1 giá trị) dùng `ORDER BY ... DESC LIMIT N`, N > ~15 làm plugin trả sai thứ tự/một frame mỗi dòng thay vì gộp (đã kiểm chứng: cùng CQL chạy trực tiếp bằng `cqlsh` luôn đúng). Khắc phục: giữ `LIMIT` ở panel timeseries ≤ 15 và thêm transform `merge`; không phải lỗi dữ liệu hay cấu hình |

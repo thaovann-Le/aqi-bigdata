@@ -227,32 +227,34 @@
       "id": 5,
       "type": "timeseries",
       "title": "Xu hướng AQI theo giờ - so sánh Hà Nội / TP.HCM",
-      "description": "daily_agg, period_type='hour', data_basis='model' (chuỗi mô hình CAMS, liên tục, không có khoảng trống). 168 giờ gần nhất (~7 ngày).",
+      "description": "daily_agg, period_type='hour', data_basis='model' (chuỗi mô hình CAMS, liên tục, không có khoảng trống). 12 giờ gần nhất. LIMIT cố ý giữ nhỏ (<=15): plugin hadesarchitect-cassandra-datasource trả sai thứ tự/trộn dữ liệu cũ-mới khi ORDER BY ... DESC LIMIT > ~15 (lỗi phân trang của plugin, đã kiểm chứng bằng cqlsh trực tiếp cho kết quả đúng) — xem README mục Lỗi thường gặp.",
       "gridPos": { "x": 0, "y": 9, "w": 24, "h": 8 },
       "datasource": { "type": "hadesarchitect-cassandra-datasource", "uid": "cassandra_aqi" },
+      "transformations": [{ "id": "merge", "options": {} }],
       "targets": [
         {
           "refId": "A",
           "datasource": { "type": "hadesarchitect-cassandra-datasource", "uid": "cassandra_aqi" },
           "rawQuery": true,
           "queryType": "query",
-          "alias": "Hà Nội",
-          "query": "SELECT period_start, avg_aqi FROM aqi.daily_agg WHERE city = 'hanoi' AND period_type = 'hour' AND data_basis = 'model' ORDER BY period_start DESC LIMIT 168",
-          "target": "SELECT period_start, avg_aqi FROM aqi.daily_agg WHERE city = 'hanoi' AND period_type = 'hour' AND data_basis = 'model' ORDER BY period_start DESC LIMIT 168"
+          "query": "SELECT period_start, avg_aqi AS aqi_hanoi FROM aqi.daily_agg WHERE city = 'hanoi' AND period_type = 'hour' AND data_basis = 'model' ORDER BY period_start DESC LIMIT 12",
+          "target": "SELECT period_start, avg_aqi AS aqi_hanoi FROM aqi.daily_agg WHERE city = 'hanoi' AND period_type = 'hour' AND data_basis = 'model' ORDER BY period_start DESC LIMIT 12"
         },
         {
           "refId": "B",
           "datasource": { "type": "hadesarchitect-cassandra-datasource", "uid": "cassandra_aqi" },
           "rawQuery": true,
           "queryType": "query",
-          "alias": "TP.HCM",
-          "query": "SELECT period_start, avg_aqi FROM aqi.daily_agg WHERE city = 'hcm' AND period_type = 'hour' AND data_basis = 'model' ORDER BY period_start DESC LIMIT 168",
-          "target": "SELECT period_start, avg_aqi FROM aqi.daily_agg WHERE city = 'hcm' AND period_type = 'hour' AND data_basis = 'model' ORDER BY period_start DESC LIMIT 168"
+          "query": "SELECT period_start, avg_aqi AS aqi_hcm FROM aqi.daily_agg WHERE city = 'hcm' AND period_type = 'hour' AND data_basis = 'model' ORDER BY period_start DESC LIMIT 12",
+          "target": "SELECT period_start, avg_aqi AS aqi_hcm FROM aqi.daily_agg WHERE city = 'hcm' AND period_type = 'hour' AND data_basis = 'model' ORDER BY period_start DESC LIMIT 12"
         }
       ],
       "fieldConfig": {
         "defaults": { "unit": "none", "custom": { "drawStyle": "line", "lineWidth": 2, "spanNulls": true } },
-        "overrides": []
+        "overrides": [
+          { "matcher": { "id": "byName", "options": "aqi_hanoi" }, "properties": [{ "id": "displayName", "value": "Hà Nội" }] },
+          { "matcher": { "id": "byName", "options": "aqi_hcm" }, "properties": [{ "id": "displayName", "value": "TP.HCM" }] }
+        ]
       },
       "options": { "legend": { "displayMode": "list", "placement": "bottom" }, "tooltip": { "mode": "multi" } }
     },
@@ -307,54 +309,51 @@
       "id": 7,
       "type": "timeseries",
       "title": "Dự báo so với thực tế (AQI +24h)",
-      "description": "forecasts.predicted_aqi (D ghi hằng giờ, trống cho tới khi ml/serving chạy) vs daily_agg đo thực tế (data_basis='measured'). 48 giờ gần nhất.",
+      "description": "forecasts.predicted_aqi (D, ghi bằng ml/serving/backfill_forecasts.py cho giai đoạn test 10-12/2025) vs daily_agg đo thực tế (data_basis='measured'). Khung 20-31/12/2025: forecasts chỉ có cho giai đoạn test, không phủ đến hiện tại (chưa có luồng real-time liên tục để dự báo 'bây giờ'). Dùng ORDER BY ASC + WHERE theo khoảng ngày thay vì DESC LIMIT lớn: plugin hadesarchitect-cassandra-datasource trả sai thứ tự/trộn dữ liệu cũ-mới khi ORDER BY ... DESC LIMIT > ~15 (lỗi phân trang của plugin, ASC không bị) — xem README mục Lỗi thường gặp.",
       "gridPos": { "x": 12, "y": 17, "w": 12, "h": 8 },
       "datasource": { "type": "hadesarchitect-cassandra-datasource", "uid": "cassandra_aqi" },
+      "transformations": [{ "id": "merge", "options": {} }],
       "targets": [
         {
           "refId": "A",
           "datasource": { "type": "hadesarchitect-cassandra-datasource", "uid": "cassandra_aqi" },
           "rawQuery": true,
           "queryType": "query",
-          "alias": "Dự báo - Hà Nội",
-          "query": "SELECT forecast_for, predicted_aqi FROM aqi.forecasts WHERE city = 'hanoi' ORDER BY forecast_for DESC LIMIT 48",
-          "target": "SELECT forecast_for, predicted_aqi FROM aqi.forecasts WHERE city = 'hanoi' ORDER BY forecast_for DESC LIMIT 48"
+          "query": "SELECT forecast_for, predicted_aqi AS pred_hanoi FROM aqi.forecasts WHERE city = 'hanoi' AND forecast_for >= '2025-12-20' AND forecast_for < '2026-01-01' ORDER BY forecast_for ASC",
+          "target": "SELECT forecast_for, predicted_aqi AS pred_hanoi FROM aqi.forecasts WHERE city = 'hanoi' AND forecast_for >= '2025-12-20' AND forecast_for < '2026-01-01' ORDER BY forecast_for ASC"
         },
         {
           "refId": "B",
           "datasource": { "type": "hadesarchitect-cassandra-datasource", "uid": "cassandra_aqi" },
           "rawQuery": true,
           "queryType": "query",
-          "alias": "Thực tế - Hà Nội",
-          "query": "SELECT period_start, avg_aqi FROM aqi.daily_agg WHERE city = 'hanoi' AND period_type = 'hour' AND data_basis = 'measured' ORDER BY period_start DESC LIMIT 48",
-          "target": "SELECT period_start, avg_aqi FROM aqi.daily_agg WHERE city = 'hanoi' AND period_type = 'hour' AND data_basis = 'measured' ORDER BY period_start DESC LIMIT 48"
+          "query": "SELECT period_start AS forecast_for, avg_aqi AS meas_hanoi FROM aqi.daily_agg WHERE city = 'hanoi' AND period_type = 'hour' AND data_basis = 'measured' AND period_start >= '2025-12-20' AND period_start < '2026-01-01' ORDER BY period_start ASC",
+          "target": "SELECT period_start AS forecast_for, avg_aqi AS meas_hanoi FROM aqi.daily_agg WHERE city = 'hanoi' AND period_type = 'hour' AND data_basis = 'measured' AND period_start >= '2025-12-20' AND period_start < '2026-01-01' ORDER BY period_start ASC"
         },
         {
           "refId": "C",
           "datasource": { "type": "hadesarchitect-cassandra-datasource", "uid": "cassandra_aqi" },
           "rawQuery": true,
           "queryType": "query",
-          "alias": "Dự báo - TP.HCM",
-          "query": "SELECT forecast_for, predicted_aqi FROM aqi.forecasts WHERE city = 'hcm' ORDER BY forecast_for DESC LIMIT 48",
-          "target": "SELECT forecast_for, predicted_aqi FROM aqi.forecasts WHERE city = 'hcm' ORDER BY forecast_for DESC LIMIT 48"
+          "query": "SELECT forecast_for, predicted_aqi AS pred_hcm FROM aqi.forecasts WHERE city = 'hcm' AND forecast_for >= '2025-12-20' AND forecast_for < '2026-01-01' ORDER BY forecast_for ASC",
+          "target": "SELECT forecast_for, predicted_aqi AS pred_hcm FROM aqi.forecasts WHERE city = 'hcm' AND forecast_for >= '2025-12-20' AND forecast_for < '2026-01-01' ORDER BY forecast_for ASC"
         },
         {
           "refId": "D",
           "datasource": { "type": "hadesarchitect-cassandra-datasource", "uid": "cassandra_aqi" },
           "rawQuery": true,
           "queryType": "query",
-          "alias": "Thực tế - TP.HCM",
-          "query": "SELECT period_start, avg_aqi FROM aqi.daily_agg WHERE city = 'hcm' AND period_type = 'hour' AND data_basis = 'measured' ORDER BY period_start DESC LIMIT 48",
-          "target": "SELECT period_start, avg_aqi FROM aqi.daily_agg WHERE city = 'hcm' AND period_type = 'hour' AND data_basis = 'measured' ORDER BY period_start DESC LIMIT 48"
+          "query": "SELECT period_start AS forecast_for, avg_aqi AS meas_hcm FROM aqi.daily_agg WHERE city = 'hcm' AND period_type = 'hour' AND data_basis = 'measured' AND period_start >= '2025-12-20' AND period_start < '2026-01-01' ORDER BY period_start ASC",
+          "target": "SELECT period_start AS forecast_for, avg_aqi AS meas_hcm FROM aqi.daily_agg WHERE city = 'hcm' AND period_type = 'hour' AND data_basis = 'measured' AND period_start >= '2025-12-20' AND period_start < '2026-01-01' ORDER BY period_start ASC"
         }
       ],
       "fieldConfig": {
         "defaults": { "unit": "none", "custom": { "drawStyle": "line", "lineWidth": 2, "spanNulls": true } },
         "overrides": [
-          {
-            "matcher": { "id": "byRegexp", "options": "Dự báo.*" },
-            "properties": [{ "id": "custom.lineStyle", "value": { "fill": "dash", "dash": [10, 10] } }]
-          }
+          { "matcher": { "id": "byName", "options": "pred_hanoi" }, "properties": [{ "id": "displayName", "value": "Dự báo - Hà Nội" }, { "id": "custom.lineStyle", "value": { "fill": "dash", "dash": [10, 10] } }] },
+          { "matcher": { "id": "byName", "options": "meas_hanoi" }, "properties": [{ "id": "displayName", "value": "Thực tế - Hà Nội" }] },
+          { "matcher": { "id": "byName", "options": "pred_hcm" }, "properties": [{ "id": "displayName", "value": "Dự báo - TP.HCM" }, { "id": "custom.lineStyle", "value": { "fill": "dash", "dash": [10, 10] } }] },
+          { "matcher": { "id": "byName", "options": "meas_hcm" }, "properties": [{ "id": "displayName", "value": "Thực tế - TP.HCM" }] }
         ]
       },
       "options": { "legend": { "displayMode": "list", "placement": "bottom" }, "tooltip": { "mode": "multi" } }

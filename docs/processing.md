@@ -1,7 +1,9 @@
 # Chương: Xử lý dữ liệu (vai C)
 
-> Bản nháp đã có thiết kế và các quyết định. Mục 6 (hiệu năng) cần điền số liệu thật sau khi chạy
-> toàn bộ dữ liệu lịch sử: lấy từ `processing/_runtime/metrics.jsonl`.
+> Phần này là nơi áp dụng trực tiếp nhất kiến thức môn **Tích hợp Dữ liệu Lớn**: hợp nhất 3 nguồn không
+> đồng nhất (Heterogeneity), ánh xạ về schema chung theo GAV, và gộp trạm trùng bằng Record Linkage/Entity
+> Resolution. Đối chiếu chi tiết với slide môn học, có trích dẫn file/dòng code: xem
+> [`docs/data_integration_concepts.md`](data_integration_concepts.md).
 
 ## 1. Tổng quan
 
@@ -93,15 +95,20 @@ Chỉ dùng số đo tại trạm, không dùng số mô hình.
 ## 7. Hiệu năng
 
 Mỗi job ghi một dòng JSON vào `processing/_runtime/metrics.jsonl` (số bản ghi, thời gian, bản ghi/phút;
-streaming ghi theo từng micro-batch).
+streaming ghi theo từng micro-batch). Số liệu dưới đây đo khi chạy `batch_history` trên **toàn bộ dữ liệu
+lịch sử thật** (63 tỉnh/thành, 2021–2026, qua `docker-compose.demo.yml`):
 
 | Job | Dữ liệu | Số bản ghi ra | Thời gian | Bản ghi/phút |
-|---|---|---|---|---|
-| batch_history | (điền) | | | |
-| batch_aggregate | | | | |
-| streaming (trung bình mỗi lô) | | | | |
+|---|---|---:|---:|---:|
+| batch_history | Toàn bộ lịch sử (63 tỉnh/thành) | 2.102.033 measurements + 2.761.266 weather_hourly | 480 giây | ~262.700 |
+| batch_aggregate | Toàn bộ `measurements` → `daily_agg` (giờ/ngày/tháng/mùa) | 1.950.663 + 81.479 + 2.700 + 57 = 2.034.899 | 230 giây | ~530.800 |
+| streaming (1 micro-batch, dữ liệu real-time mẫu) | 1.116 message Kafka | 114 dòng measurements, 33 alerts | 94 giây | ~714 message/phút |
 
-Môi trường đo: (điền cấu hình máy, số core/RAM cấp cho Spark worker).
+Môi trường đo: Spark standalone 1 worker, `SPARK_WORKER_CORES=2`, `SPARK_WORKER_MEMORY=2g` (cấu hình mặc định
+của `docker-compose.demo.yml`). Ở cấu hình này, chạy đồng thời `job-history` + `job-stream` + `job-aggregate`
+làm batch_history bị nghẽn tài nguyên (worker chỉ có 2 core cho cả 3 job) — số liệu trên đo khi tạm dừng
+`job-stream`/`job-aggregate` trong lúc batch_history chạy (xem `docs/architecture.md` mục 3 "Bài học triển khai
+thực tế").
 
 ## 8. Kiểm thử
 

@@ -2,9 +2,12 @@
 
 Hệ thống thu thập, xử lý và dự báo chất lượng không khí theo thời gian thực cho
 Hà Nội và TP.HCM. Xem kế hoạch chi tiết (phân công, timeline, outcome) tại
-[`docs/PLAN.md`](docs/PLAN.md). Project này đối chiếu và áp dụng các khái niệm của môn Tích hợp
-Dữ liệu Lớn (heterogeneity, schema alignment/GAV, record linkage, sources selection) — xem
-[`docs/data_integration_concepts.md`](docs/data_integration_concepts.md).
+[`docs/PLAN.md`](docs/PLAN.md).
+
+> **Áp dụng kiến thức môn Tích hợp Dữ liệu Lớn:** project hợp nhất 3 nguồn không đồng nhất (AQICN, OpenAQ,
+> Open-Meteo) thành một schema chung. Đối chiếu từng khái niệm đã học (6 mức heterogeneity, kiến trúc
+> Warehousing vs Virtual, Schema Alignment theo GAV, Record Linkage/Entity Resolution, Sources Selection)
+> với code thật trong project, kèm trích dẫn file/dòng cụ thể: **[`docs/data_integration_concepts.md`](docs/data_integration_concepts.md)**.
 
 ## Kiến trúc
 
