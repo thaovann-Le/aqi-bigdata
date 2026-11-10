@@ -95,7 +95,7 @@ Mọi job **chạy lại được** (idempotent): ghi theo khóa chính của Ca
 cd processing
 python -m venv .venv && source .venv/bin/activate       # Windows: .venv\Scripts\activate
 pip install -r requirements-dev.txt                      # pyspark 3.5, pytest, pandas; cần Java 11/17
-python -m pytest tests -q                                # 38 test, khoảng 3-6 phút
+python -m pytest tests -q                                # 46 test, khoảng 5-8 phút
 ```
 
 Test chạy Spark cục bộ trên: dữ liệu real-time **thật** của B (`raw-mau.zip`), và dữ liệu lịch sử giả đúng
@@ -139,6 +139,7 @@ Khi B cập nhật `ingestion/stations.json` hoặc `ingestion/openaq_locations.
 | `job-*` lỗi `Unresolved dependencies` | không tải được jar từ Maven Central: kiểm tra Internet/proxy rồi chạy lại; jar được cache trong volume `ivy_cache` |
 | `job-*` treo ở `Initial job has not accepted any resources` | worker hết core/RAM: giảm job chạy song song, hoặc tăng `SPARK_WORKER_CORES`/`SPARK_WORKER_MEMORY`, hoặc đặt `SPARK_MASTER=local[2]` |
 | Cassandra lỗi `Undefined column name pressure` / sai khóa chính | volume còn schema cũ: `docker compose ... exec cassandra cqlsh -e "DROP KEYSPACE aqi"` rồi `docker compose ... restart cassandra-init` |
+| Streaming/batch_raw lỗi `unconfigured table weather_readings` (hoặc `openaq_observations`) | schema mới thêm 2 bảng trạng thái (CREATE IF NOT EXISTS, không đụng bảng cũ): `docker compose ... restart cassandra-init`, không cần xóa keyspace |
 | `measurements` có số nhưng `temperature` null ở vài giờ đầu | bình thường: thời tiết real-time bắt đầu muộn hơn số đo AQICN (dữ liệu trạm báo trễ) |
 | Không có cảnh báo nào | AQI chưa vượt 150; hạ `ALERT_THRESHOLD` khi demo |
 | Đổi code mà streaming không nhận | dừng `job-stream` và khởi động lại; đổi logic lớn thì xóa checkpoint (`down -v` hoặc đổi `--checkpoint`) |

@@ -3,6 +3,8 @@
   - bỏ message hỏng, bản ghi trùng, giá trị ngoài khoảng; đổi đơn vị; giờ về UTC+7 (đầu giờ)
   - ghi weather_hourly, ghép thời tiết vào số đo theo (city, giờ), ghi measurements
   - sinh alerts khi AQI tại trạm > ngưỡng
+  - mỗi lô đọc lại trạng thái đã ghi ở lô trước (số đo OpenAQ, số đọc thời tiết 15 phút, thời tiết giờ,
+    measurements) để số liệu của một giờ luôn tính trên đủ dữ liệu của giờ đó (kết quả = chạy batch một lần)
 
 Logic nằm trong common/pipeline.py (dùng chung với batch). Script này chỉ lo nguồn Kafka và trigger.
 
@@ -37,8 +39,7 @@ def main():
 
     spark = io.build_spark("stream_measurements", a.master)
     stations = io.load_stations(spark)
-    lookup = io.weather_lookup_from_cassandra if a.sink == "cassandra" else None
-    handler = make_foreach_batch(io.make_sink(a.sink), stations, lookup)
+    handler = make_foreach_batch(io.make_sink(a.sink), stations, **io.make_lookups(a.sink, stations))
 
     kafka = (spark.readStream.format("kafka")
              .option("kafka.bootstrap.servers", a.bootstrap)

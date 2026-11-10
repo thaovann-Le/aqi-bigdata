@@ -76,13 +76,83 @@ def test_model_rows_flagged(env):
     assert x["pm25"] == pytest.approx(45.6) and x["aqi"] == 116
 
 
-def test_weather_hourly_units_and_floor(env):
+def test_weather_hourly_units_and_hour_ending(env):
     w = [r.asDict() for r in sources.realtime_weather(env).collect()]
     keyed = {(r["city"], vn(r["ts"])): r for r in w}
     assert len(keyed) == len(w)                                 # mỗi (city, giờ) một dòng
-    x = keyed[("hanoi", datetime(2026, 10, 6, 23, 0))]          # current.time = 23:30 -> đầu giờ 23:00
+    x = keyed[("hanoi", datetime(2026, 10, 7, 0, 0))]           # current.time 23:30, 23:45, 00:00 -> giờ 00:00
+    assert ("hanoi", datetime(2026, 10, 6, 23, 0)) not in keyed  # chưa có số đọc nào trong (22:00, 23:00]
     assert 0 <= x["wind_speed"] < 5                             # đã đổi km/h -> m/s
     assert 15 < x["temperature"] < 30 and 900 < x["pressure"] < 1100
+
+
+def _weather_msg(time, t, rain, fetched, interval=900):
+    return json.dumps({"source": "openmeteo", "city": "hanoi", "station_id": None, "fetched_at": fetched,
+                       "payload": {"current": {"time": time, "interval": interval, "temperature_2m": t,
+                                               "relative_humidity_2m": 80, "precipitation": rain,
+                                               "wind_speed_10m": 3.6, "wind_direction_10m": 90,
+                                               "surface_pressure": 1010}}})
+
+
+def test_weather_hour_matches_openmeteo_hourly_convention(spark):
+    """Giờ T: biến tức thời = số đọc lúc T (mới nhất trong (T-1h, T]); mưa = tổng các số đọc 15 phút trong (T-1h, T]."""
+    lines = [_weather_msg("2026-10-07T08:15", 20.0, 0.1, "2026-10-07T01:20:00+00:00"),
+             _weather_msg("2026-10-07T08:30", 21.0, 0.2, "2026-10-07T01:35:00+00:00"),
+             _weather_msg("2026-10-07T08:45", 22.0, 0.3, "2026-10-07T01:50:00+00:00"),
+             _weather_msg("2026-10-07T09:00", 23.0, 0.4, "2026-10-07T02:05:00+00:00"),
+             _weather_msg("2026-10-07T09:00", 23.0, 0.4, "2026-10-07T02:10:00+00:00"),   # trùng: cùng số đọc
+             _weather_msg("2026-10-07T09:15", 24.0, 0.5, "2026-10-07T02:20:00+00:00"),
+             _weather_msg("2026-10-07T09:45", 26.0, 0.3, "2026-10-07T02:50:00+00:00")]   # thiếu 09:30, 10:00
+    e = sources.parse_envelope(spark.createDataFrame([(x,) for x in lines], "value string"))
+    got = {vn(r["ts"]): r.asDict() for r in sources.realtime_weather(e).collect()}
+    assert set(got) == {datetime(2026, 10, 7, 9), datetime(2026, 10, 7, 10)}
+    assert got[datetime(2026, 10, 7, 9)]["temperature"] == 23.0
+    assert got[datetime(2026, 10, 7, 9)]["precipitation"] == pytest.approx(1.0)
+    assert got[datetime(2026, 10, 7, 10)]["temperature"] == 26.0
+    assert got[datetime(2026, 10, 7, 10)]["precipitation"] == pytest.approx((0.5 + 0.3) * 4 / 2)   # quy đổi 2/4 số đọc
+    assert got[datetime(2026, 10, 7, 9)]["wind_speed"] == pytest.approx(1.0)
+
+
+def _oaq_msg(fetched, results, station=4946813):
+    return json.dumps({"source": "openaq", "city": "hanoi", "station_id": station, "fetched_at": fetched,
+                       "payload": {"results": [{"datetime": {"utc": t}, "value": v, "parameter": p, "units": "µg/m³"}
+                                               for t, p, v in results]}})
+
+
+def test_five_minute_samples_belong_to_the_hour_they_end_in(spark):
+    """Mẫu 07:55 thuộc giờ 08:00 (khoảng 07:00–08:00]; mẫu 08:05, 08:15 thuộc giờ 09:00 - như trung bình giờ của OpenAQ."""
+    lines = [_oaq_msg("2026-10-07T01:16:00+00:00", [("2026-10-07T00:55:00Z", "pm25", 61.2)]),
+             _oaq_msg("2026-10-07T01:26:00+00:00", [("2026-10-07T01:05:00Z", "pm25", 80.0),
+                                                     ("2026-10-07T01:15:00Z", "pm25", 70.0)])]
+    e = sources.parse_envelope(spark.createDataFrame([(x,) for x in lines], "value string"))
+    got = {vn(r["ts"]): r["pm25"] for r in sources.realtime_openaq(e).collect()}
+    assert got == {datetime(2026, 10, 7, 8): pytest.approx(61.2), datetime(2026, 10, 7, 9): pytest.approx(75.0)}
+
+
+def test_future_timestamps_dropped(spark):
+    """Thời điểm đo sau lúc gọi API hơn MAX_FUTURE_MINUTES là sai đồng hồ: không được lọt qua bộ lọc 48 giờ."""
+    future = _oaq_msg("2026-10-07T01:00:00+00:00", [("2026-10-07T05:00:00Z", "pm25", 30.0),
+                                                     ("2026-10-07T01:00:00Z", "pm10", 40.0)])
+    aqicn = json.dumps({"source": "aqicn", "city": "hanoi", "station_id": 1583,
+                        "fetched_at": "2026-10-07T01:00:00+00:00",
+                        "payload": {"aqi": "90", "time": {"iso": "2026-10-07T11:00:00+07:00"}}})
+    e = sources.parse_envelope(spark.createDataFrame([(future,), (aqicn,)], "value string"))
+    assert [vn(r["ts"]) for r in sources.realtime_openaq(e).collect()] == [datetime(2026, 10, 7, 8)]
+    assert sources.realtime_aqicn(e).count() == 0
+
+
+def test_model_aqi_left_null_when_source_has_none(spark):
+    """CAMS không có us_aqi -> giữ null (không thay bằng AQI tự tính theo giờ); OpenAQ thì tự tính."""
+    model = json.dumps({"source": "openmeteo_aq", "city": "hanoi", "station_id": None,
+                        "fetched_at": "2026-10-07T01:10:00+00:00",
+                        "payload": {"current": {"time": "2026-10-07T08:00", "pm2_5": 80.0, "pm10": 90.0,
+                                                "us_aqi": None}}})
+    oaq = _oaq_msg("2026-10-07T01:10:00+00:00", [("2026-10-07T01:00:00Z", "pm25", 80.0)], station=2161292)
+    e = sources.parse_envelope(spark.createDataFrame([(model,), (oaq,)], "value string"))
+    m = {r["station_id"]: r.asDict()
+         for r in build_measurements(sources.realtime_aq(e), sources.realtime_weather(e)).collect()}
+    assert m["model:hanoi"]["aqi"] is None and m["model:hanoi"]["pm25"] == 80.0
+    assert m["openaq:2161292"]["aqi"] == aqi_py(80.0)
 
 
 def test_measurements_have_no_duplicate_keys_and_have_weather(env):

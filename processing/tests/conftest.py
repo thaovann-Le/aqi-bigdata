@@ -51,15 +51,29 @@ def raw_sample(tmp_path_factory):
 
 
 class Collector:
-    """Sink giả: gom các dòng đã "ghi" theo tên bảng để test kiểm tra."""
+    """Sink giả: gom các dòng đã "ghi" (và lệnh xóa) theo tên bảng, đúng thứ tự, để test kiểm tra."""
     def __init__(self):
         self.tables = {}
 
     def __call__(self, df, table):
         self.tables.setdefault(table, []).extend(r.asDict() for r in df.collect())
 
+    def delete(self, df, table):
+        self.tables.setdefault(table, []).extend({**r.asDict(), "__deleted__": True} for r in df.collect())
+
     def rows(self, table):
-        return self.tables.get(table, [])
+        return [r for r in self.tables.get(table, []) if not r.get("__deleted__")]
+
+    def merged(self, table, keys):
+        """Như Cassandra với ignoreNulls=true: upsert theo khóa chính, null không xóa giá trị cũ, lệnh xóa bỏ dòng."""
+        d = {}
+        for r in self.tables.get(table, []):
+            k = tuple(r[c] for c in keys)
+            if r.get("__deleted__"):
+                d.pop(k, None)
+            else:
+                d[k] = {**d.get(k, {}), **{c: v for c, v in r.items() if v is not None}}
+        return d
 
 
 @pytest.fixture()
