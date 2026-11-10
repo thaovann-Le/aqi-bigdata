@@ -71,10 +71,13 @@ def test_openaq_aqi_computed_from_pm(built):
 
 
 def test_five_minute_station_collapsed_to_hourly(built):
+    """Giờ T gồm các mẫu trong (T-1h, T]: mẫu hh:05..hh:55 (11..21) của giờ trước + mẫu đúng T (10) -> 15,5."""
     got = rows(built["meas"], station_id="openaq:4946811")
-    assert len(got) == 2 * 3 * 24            # 2 cửa sổ (tháng 1, tháng 7) x 3 ngày x 24 giờ
+    assert len(got) == 2 * (3 * 24 + 1)      # 2 cửa sổ x (3 ngày x 24 giờ + giờ kết thúc sau mẫu cuối)
     assert len(got) == len({x["ts"] for x in got})
-    assert all(x["pm25"] == pytest.approx(15.5) for x in got)   # 12 mẫu 10.0 + (0..11) -> trung bình 15.5
+    vals = sorted(round(x["pm25"], 3) for x in got)
+    assert vals.count(10.0) == 2 and vals.count(16.0) == 2      # đầu cửa sổ chỉ có mẫu 00:00; giờ cuối có 11 mẫu
+    assert all(v == 15.5 for v in vals if v not in (10.0, 16.0))
 
 
 def test_non_mass_units_ignored(built):
@@ -113,6 +116,55 @@ def test_alerts_only_measured_above_threshold(built):
 def test_idempotent_no_duplicate_keys(built):
     m = built["meas"]
     assert m.count() == m.select("city", "station_id", "ts").distinct().count()
+
+
+def _gz_csv(path, rows):
+    import csv
+    import gzip
+    import io
+    buf = io.StringIO()
+    w = csv.writer(buf, lineterminator="\n")
+    w.writerow(["location_id", "sensors_id", "location", "datetime", "lat", "lon", "parameter", "units", "value"])
+    w.writerows(rows)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_bytes(gzip.compress(buf.getvalue().encode("utf-8")))
+
+
+@pytest.fixture(scope="module")
+def history_with_backfill(sample_history, tmp_path_factory):
+    """Bản sao dữ liệu mẫu + thư mục backfill/ đúng cấu trúc backfill.zip + điểm Đà Lạt (áp suất bề mặt thấp)."""
+    import json
+    import shutil
+    base = tmp_path_factory.mktemp("hist_bf") / "history"
+    shutil.copytree(sample_history, base)
+    t = "2026-10-06T08:00:00+07:00"
+    _gz_csv(base / "backfill/openaq/locationid=2161292/location-2161292-backfill.csv.gz",
+            [[2161292, 1, "Lưu Quang Vũ", t, 21.0, 105.8, "pm25", "µg/m³", 33.0]])
+    hourly = {"time": ["2026-10-06T08:00"], "temperature_2m": [25.0], "relative_humidity_2m": [70.0],
+              "precipitation": [0.0], "wind_speed_10m": [7.2], "wind_direction_10m": [90.0], "surface_pressure": [1012.0]}
+    p = base / "backfill/openmeteo/weather/point=hanoi/backfill.json"
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text(json.dumps({"point_id": "hanoi", "hourly": hourly}), encoding="utf-8")
+    dl = {**hourly, "time": ["2023-01-01T08:00"], "surface_pressure": [848.6]}
+    p = base / "openmeteo/weather/point=dalat/year=2023.json"
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text(json.dumps({"point_id": "dalat", "hourly": dl}), encoding="utf-8")
+    return str(base)
+
+
+def test_backfill_read_only_when_enabled(spark, stations, history_with_backfill):
+    on = sources.history_openaq(spark, history_with_backfill, stations, CITIES, backfill=True)
+    off = sources.history_openaq(spark, history_with_backfill, stations, CITIES)
+    x = by_hour(on, "openaq:2161292")[datetime(2026, 10, 6, 8)]
+    assert x["pm25"] == 33.0 and datetime(2026, 10, 6, 8) not in by_hour(off, "openaq:2161292")
+    w = sources.history_weather(spark, history_with_backfill, CITIES, backfill=True)
+    assert rows(w.where(F.year("ts") == 2026), city="hanoi")[0]["temperature"] == 25.0
+
+
+def test_high_altitude_surface_pressure_kept(spark, history_with_backfill):
+    """Đà Lạt ~1.500 m: áp suất bề mặt 848,6 hPa là số thật, không bị loại (cận dưới 500 hPa)."""
+    w = rows(sources.history_weather(spark, history_with_backfill, ["dalat"]), city="dalat")
+    assert w and w[0]["pressure"] == pytest.approx(848.6)
 
 
 def test_all_points_when_cities_is_none(spark, sample_history):

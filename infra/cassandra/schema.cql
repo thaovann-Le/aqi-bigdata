@@ -17,7 +17,7 @@ USE aqi;
 CREATE TABLE IF NOT EXISTS measurements (
   city            text,       -- 'hanoi' | 'hcm'
   station_id      text,
-  ts              timestamp,  -- đầu giờ (làm tròn xuống giờ) của thời điểm đo
+  ts              timestamp,  -- mốc giờ T: số liệu của khoảng (T-1h, T] (số đo đúng đầu giờ giữ nguyên mốc)
   pm25            double,     -- µg/m³ (null với AQICN: nguồn này chỉ cho chỉ số AQI con)
   pm10            double,     -- µg/m³
   o3              double,     -- µg/m³
@@ -49,6 +49,35 @@ CREATE TABLE IF NOT EXISTS weather_hourly (
   pressure        double,
   PRIMARY KEY ((city), ts)
 ) WITH CLUSTERING ORDER BY (ts DESC);
+
+-- Trạng thái cho streaming (C): dữ liệu một giờ đến qua nhiều micro-batch, nên mỗi lô đọc lại phần đã đến ở lô trước
+-- để tính lại TRỌN giờ (kết quả bằng chạy batch một lần). Chỉ dùng nội bộ, tự hết hạn sau 14 ngày (TTL).
+-- Số đọc `current` 15 phút của Open-Meteo: tính mưa cả giờ (tổng 4 số đọc) và giá trị tức thời lúc đầu giờ.
+CREATE TABLE IF NOT EXISTS weather_readings (
+  city            text,
+  ts_reading      timestamp,  -- current.time (giờ VN, mỗi 15 phút)
+  interval_sec    int,        -- độ dài khoảng của precipitation (900 = 15 phút)
+  temperature     double,
+  humidity        double,
+  wind_speed      double,     -- m/s
+  wind_direction  double,
+  precipitation   double,     -- mm trong interval_sec giây trước ts_reading
+  pressure        double,
+  fetched_at      timestamp,
+  PRIMARY KEY ((city), ts_reading)
+) WITH CLUSTERING ORDER BY (ts_reading DESC) AND default_time_to_live = 1209600;
+
+-- Từng số đo OpenAQ real-time (đã lọc): trung bình giờ của trạm đo 5 phút và AQI của trạm có cảm biến lệch giờ
+-- được tính trên mọi số đo của giờ thay vì chỉ phần nằm trong lô.
+CREATE TABLE IF NOT EXISTS openaq_observations (
+  city        text,
+  station_id  text,
+  ts_obs      timestamp,      -- thời điểm đo
+  parameter   text,           -- pm25 | pm10 | o3 | no2 | so2 | co
+  value       double,         -- µg/m³
+  fetched_at  timestamp,
+  PRIMARY KEY ((city, station_id), ts_obs, parameter)
+) WITH CLUSTERING ORDER BY (ts_obs DESC, parameter ASC) AND default_time_to_live = 1209600;
 
 -- Tổng hợp theo thành phố. data_basis tách số đo trạm ('measured') khỏi số mô hình ('model'),
 -- hai chuỗi này không bao giờ được trộn lẫn.

@@ -6,6 +6,10 @@ Chạy xong thì chạy tiếp batch_aggregate.py để sinh daily_agg.
   spark-submit batch_history.py                                   # mọi điểm (63 tỉnh/thành), mọi năm, ghi Cassandra
   spark-submit batch_history.py --cities hanoi,hcm                # chỉ hai thành phố
   spark-submit batch_history.py --years 2024,2025 --sink parquet:/tmp/out
+  spark-submit batch_history.py --no-backfill                     # bỏ thư mục backfill/ (tải bù của B)
+
+Thư mục backfill/ (backfill.zip: OpenAQ và Open-Meteo theo giờ 06–13/10/2026, không có thư mục year=) được đọc
+cùng khi không lọc năm; nó trùng khóa với dữ liệu real-time nên ghi đè bằng số theo giờ đầy đủ hơn.
 """
 import argparse
 import os
@@ -35,6 +39,7 @@ def main():
     ap.add_argument("--years", default="", help="ví dụ 2024,2025 (mặc định: tất cả)")
     ap.add_argument("--sink", default="cassandra", help="cassandra | console | parquet:<thư mục>")
     ap.add_argument("--no-model", action="store_true", help="bỏ số mô hình Open-Meteo (chỉ số đo trạm)")
+    ap.add_argument("--no-backfill", action="store_true", help="không đọc thư mục backfill/")
     ap.add_argument("--master", default=None)
     a = ap.parse_args()
 
@@ -43,12 +48,13 @@ def main():
     write = io.make_sink(a.sink)
     stations = io.load_stations(spark)
     yrs = years_glob(a.years)
+    backfill = not a.no_backfill and yrs == "*"          # backfill không chia theo năm: chỉ đọc khi lấy mọi năm
     t0 = time.time()
 
-    weather = sources.history_weather(spark, a.base, cities, yrs).persist()
-    aq = sources.history_openaq(spark, a.base, stations, cities, yrs)
+    weather = sources.history_weather(spark, a.base, cities, yrs, backfill).persist()
+    aq = sources.history_openaq(spark, a.base, stations, cities, yrs, backfill)
     if not a.no_model:
-        aq = aq.unionByName(sources.history_model_aq(spark, a.base, cities, yrs).select(*aq.columns))
+        aq = aq.unionByName(sources.history_model_aq(spark, a.base, cities, yrs, backfill).select(*aq.columns))
     meas = build_measurements(aq, weather).persist()
 
     n_weather, n_meas = weather.count(), meas.count()
@@ -63,7 +69,8 @@ def main():
     elapsed = time.time() - t0
 
     append_metrics("batch_history", {
-        "cities": cities or "all", "years": a.years or "all", "weather_rows": n_weather, "measurement_rows": n_meas,
+        "cities": cities or "all", "years": a.years or "all", "backfill": backfill,
+        "weather_rows": n_weather, "measurement_rows": n_meas,
         "of_which_model": n_model, "alert_rows": n_alerts, "seconds_read_and_transform": round(t_read, 1),
         "seconds_total": round(elapsed, 1), "rows_per_min": round(n_meas / elapsed * 60) if elapsed else None,
     })

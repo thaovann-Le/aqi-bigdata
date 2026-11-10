@@ -10,7 +10,7 @@ Cách chạy pipeline để có dữ liệu: [`processing/README.md`](../process
 |---|---|
 | Thành phố (`city`) | `hanoi`, `hcm` có số đo trạm + số mô hình + thời tiết. 61 tỉnh/thành còn lại (mã điểm trong `ingestion/points_vn.json`, ví dụ `haiphong`, `danang`) **chỉ có số mô hình CAMS (`is_model = true`) và thời tiết**, dùng để tăng dung lượng và so sánh; phân tích chính, dashboard và mô hình chỉ dùng `hanoi`, `hcm`. |
 | Thời gian | Cột `timestamp` là thời điểm tuyệt đối (Cassandra lưu UTC). Mọi giờ/ngày/tháng/mùa được cắt theo **giờ Việt Nam (UTC+7)**. `cqlsh` hiển thị theo UTC, hãy cộng 7 giờ khi đọc bằng mắt. |
-| Mốc giờ | `ts` = **đầu giờ** của thời điểm đo (10:37 → 10:00) |
+| Mốc giờ | `ts` = **giờ kết thúc khoảng đo**: giờ T gồm số đo trong (T−1h, T]. Số đo đúng đầu giờ giữ nguyên mốc (10:00 → 10:00), mẫu lẻ phút thuộc giờ kế tiếp (10:37 → 11:00) — cùng quy ước với OpenAQ và Open-Meteo hourly |
 | Thang AQI | **US AQI** (EPA, bảng điểm gãy PM2.5 bản 05/2024). Cột `aqi_standard` luôn là `US_AQI`. |
 | Đơn vị | chất ô nhiễm µg/m³; nhiệt độ °C; độ ẩm %; **gió m/s** (đã đổi từ km/h); hướng gió độ; mưa mm; áp suất hPa |
 | Mã trạm (`station_id`) | `<nguồn>:<mã>`: `openaq:2161292`, `aqicn:1583`, `model:hanoi`. Tên và tọa độ trạm: [`processing/reference/stations.csv`](../processing/reference/stations.csv) |
@@ -25,7 +25,7 @@ Khóa: `((city, station_id), ts)`. Một dòng mỗi trạm-giờ.
 | Cột | Ghi chú |
 |---|---|
 | `pm25`, `pm10`, `o3`, `no2`, `so2`, `co` | µg/m³; trung bình các số đo trong giờ; giá trị âm/vô lý đã bị loại (null) |
-| `aqi` | AQICN và Open-Meteo: AQI do nguồn công bố. OpenAQ: C tự tính từ PM2.5/PM10 **theo giờ** (lấy chỉ số con lớn hơn) |
+| `aqi` | AQICN và Open-Meteo: AQI do nguồn công bố (nguồn để trống thì null, không tự tính thay). OpenAQ: C tự tính từ PM2.5/PM10 **theo giờ** (lấy chỉ số con lớn hơn) |
 | `temperature` … `pressure` | thời tiết Open-Meteo **mức thành phố**, ghép theo (city, giờ) |
 | `source` | `openaq`, `aqicn`, `openmeteo_aq` |
 | `is_model` | xem mục 1 |
@@ -36,7 +36,15 @@ còn các phép tổng hợp chỉ tính một lần (cột `physical_id` trong 
 
 ### `weather_hourly` — thời tiết theo giờ của từng thành phố
 
-Khóa: `((city), ts)`. Cột như phần thời tiết của `measurements`.
+Khóa: `((city), ts)`. Cột như phần thời tiết của `measurements`. Quy ước Open-Meteo hourly cho cả lịch sử và
+real-time: nhiệt độ, độ ẩm, gió, áp suất là giá trị **tức thời lúc `ts`**; `precipitation` là **tổng mm của giờ
+trước `ts`** (real-time cộng các số đọc 15 phút; thiếu số đọc thì quy đổi theo số đọc có). `pressure` là áp suất
+bề mặt (phụ thuộc độ cao: Đà Lạt quanh 850 hPa).
+
+### `weather_readings`, `openaq_observations` — trạng thái nội bộ của streaming
+
+Số đọc thời tiết 15 phút và từng số đo OpenAQ real-time, để mỗi micro-batch tính lại trọn giờ. Tự hết hạn sau 14
+ngày. **Không dùng cho phân tích** (dùng `weather_hourly`, `measurements`).
 
 ### `daily_agg` — tổng hợp theo thành phố
 
